@@ -18,12 +18,14 @@
 }
 
 body {
+  margin: 0;
+  padding: 0;
   background-color: var(--bg-color);
   color: var(--text-color);
   word-break: break-word;
 }
 
-#contain {
+.art-container {
   margin-bottom: 2.5em;
 }
 
@@ -37,7 +39,7 @@ body {
   box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.5);
 }
 
-#contain.card::before, #contain>.card::before {
+.art-container.card::before, .art-container>.card::before {
   content: '';
   position: absolute;
   left: -2px;
@@ -62,7 +64,7 @@ h3 {
   text-align: center;
 }
 
-p {
+.card>p {
   text-indent: 2em;
 }
 
@@ -97,9 +99,9 @@ a {
 a::after {
   content: "";
   position: absolute;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   height: 1px;
   background-color: red;
   width: 100%;
@@ -115,8 +117,8 @@ a:hover::after {
 
 .pdf-article {
   width: 100%;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   min-height: 1000px;
 }
 

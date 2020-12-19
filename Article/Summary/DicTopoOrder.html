@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>字典拓扑序</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div class="card art-container">
+    <h2>字典拓扑序</h2>
+    <p>先明确一下定义。</p>
+    <ul>
+      <li>拓扑序：按访问顺序，由点的编号组成的排列。【第一个访问点，第二个访问点，...】</li>
+      <li>反拓扑序：将边取反后得到的拓扑序。</li>
+      <li>逆拓扑序：按点编号，由访问时间组成的排列。【1号点是第几个访问，2号点是第几个访问，...】</li>
+      <li>翻转：$\operatorname{rev}(1,2,\dots,n)=(n,\dots,2,1)$。</li>
+    </ul>
+    <p>以下所说的字典序<strong>最大最小</strong>定义在拓扑序所能产生的拓扑序构成的集合中。 先看一个简单的问题，</p>
+    <h5>最大/小化拓扑序</h5>
+    <p>直接贪心，维护一个堆，每次取编号最大/小的点。</p>
+    <h5>最大/小化反拓扑序</h5>
+    <p>当然是取反后直接跑...跟上一个一样。</p>
+    <h3>最大/小化逆拓扑序</h3>
+    <p>这时最大和最小不对称了（编号下标是从小到大的）。以下分情况讨论并理性证明。</p>
+    <h5>最大化：可以证明直接贪心就可以。</h5>
+    <p>定理：对于任意一张 DAG，$G(V(G)=\{1,2,\dots,n\})$ 和 $G$ 的一个拓扑序 $p$，则 $p$ 是字典序最大的，当且仅当 $p^{-1}$ 是字典序最大的。</p>
+    <p>用归纳法证明：</p>
+    <ul>
+      <li>
+        <p>当 $\vert V\vert\le2$ 显然成立。</p>
+      </li>
+      <li>
+        <p>设命题对 $\vert V\vert=n-1$ 成立，考虑 $\vert V\vert=n$ 的情况。</p>
+        <ul>
+          <li>设 $p=(p_1,p_2,\dots,p_n)$ 是 $G$ 的满足逆的字典序最大的拓扑序。设 $(p^{-1})_1=k$ ，则 $p_k=1$，且由最大性可知，$1$ 的位置 $\le k$。设有 $m$ 个点依赖于 $1$，则 $1$ 的位置 $\le n-m$。</li>
+          <li>显然存在一种拓扑序使得 $k=n-m$。只需到仅剩 $1$ 的度数为 $0$ 时才取 $1$ 即可。</li>
+          <li>考虑 $G$ 的字典序最大的拓扑序 $u$，根据上面的贪心，一定是选不了其他点时才会选 $1$。</li>
+          <li>所以在 $u$ 和 $v$ 中 $1$ 的位置是相同的。将 $2,\dots,n$ 重编号为 $1,\dots,n-1$，则根据归纳定义知结论成立。</li>
+        </ul>
+      </li>
+
+    </ul>
+    <h5>最小化</h5>
+    <p>先说结论再说证明：对于拓扑序 $p$， $p^{-1}$ 是字典序最小的当且仅当 $rev(p)$ 是最大的。</p>
+    <p>什么是 $\operatorname{rev}(p)$？其实是一个反拓扑序。不妨设反拓扑序 $u=\operatorname{rev}(p)$。对称的，命题等价于：对于拓扑序 $u$，
+      $\operatorname{rev}(u)^{-1}$ 是字典序最小的当且仅当 $u$ 是最大的，就等价于 $u^{-1}$ 最大。</p>
+    <p>观察 $\operatorname{rev}(u)^{-1}$ 和 $u^{-1}$。考虑如果 $u_x=y$，则
+      $(u^{-1})_y=x$，$(\operatorname{rev}(u)^{-1})_y=n+x-1$。然后结论就显然了。</p>
+    <p>&nbsp;</p>
+    <p>类似的定理还有（太菜了只知道这么多/kk）</p>
+    <ul>
+      <li>拓扑序 $p$ 是字典序最小的，当且仅当 $\operatorname{rev}(p^{-1})$ 是最大的。</li>
+      <li>对于拓扑序 $p$，$\operatorname{rev}(p)$ 是字典序最小的，当且仅当 $\operatorname{rev}(p^{-1})$ 是最小的。</li>
+    </ul>
+    <p>&nbsp;</p>
+    <p>参考了 yhx <a href='https://yhx-12243.github.io/OI-transit/records/ac1984%3Bagc001F.html'>AGC001F</a>。</p>
+    <p>以上定理都有前提条件是拓扑序，扩展到一般的置换集合是错的。</p>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

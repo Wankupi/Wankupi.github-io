@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>CF1034D Intervals of Intervals</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div class="card art-container">
+    <h1>CF1034D Intervals of Intervals</h1>
+    <h4>Description</h4>
+    <p>给定 $n$ 个区间 $[a_i,b_i]$，定义一个区间的区间 $[x,y]$ 的权值为 $x$ 到 $y$ 的区间的并的长度。要求选 $k$ 个不同的区间的区间，使权值和最大。</p>
+    <h4>Solution</h4>
+    <p>先看弱化版，给一些区间，多次查询一些连续区间的并的长度。</p>
+    <p>把询问离线，按右端点排序。当右端点 $R$ 不断右移（加入新区间），维护每个 $L$ 到 $R$ 的区间的并的长度 $f[L]$。</p>
+    <p>不妨认为新加入的区间覆盖了先前的区间。那么新加入区间的贡献是什么呢？对于 $[L,R-1]$，加入$R$ 后，新增的被覆盖的是原本空的地方，就等于 $|R|$ 减 原被覆盖的区间的长度。所以可以考虑加上 $R$ 的长，再减去原本在这个区间中的那些区间的长。（有点绕...举例，看图</p>
+    <p><img src="https://cdn.luogu.com.cn/upload/image_hosting/1cxl6m45.png" referrerpolicy="no-referrer"></p>
+    <p>当加入图中 id=13 这个区间时，我们可以 $f[1...13]$ 加上 13 的长度，然后 $f[1...2]$ 减去 2 的长度，$f[1...4]$ 减去4</p>
+    <p>的长度，$f[1...7]$ 减去 7 与 13 的交的长度。</p>
+    <p>以上可以使用ODT和树状数组维护。复杂度是 $O(n \log n)$。由于珂朵莉很珂爱，所以复杂度是正确的。（因为每个区间只会加入一次，每次最多分裂两个区间，每个区间最多被删一次）</p>
+    <p>可以先去做 <a href='https://www.cometoj.com/problem/1911'>CometOj1911 转转的数据结构</a> </p>
+    <p>回来看本题</p>
+    <p>找前 $k$ 大的区间并。不妨考虑求第 $k$ 大的区间并，设其长为 $len$ ，然后对于每个 $R$，求$\sum_{[f(L)\ge len]}{f(L)}$。由于长度大于等于 $len$ 的区间并的数量可能大于 $k$ ，还需要计算数量并且减去多的。</p>
+    <p>二分求 $len$，因为 $f$ 数组关于 $L$ 是单调的，可以二分计算对每个 $R$ ，有多少 $f(L)$ 大于 $len$。复杂度 $O(n\log^3 n\log 10^9)$。<del>不知道能不能过的复杂度...</del>。</p>
+    <p>优化：</p>
+    <ul>
+      <li>$f$ 数组关于 $R$ 的也是单调的，对每个 $R$ 对应的数组上二分出的位置关于 $R$ 也是单调增的。优掉$\log^2 n$。</li>
+      <li>我们发现 $f$ 的变化与 $R$ 有关，而跟二分的 $len$ 无关，可以考虑记录下 $f$ 的变化。珂朵莉树就只用做一遍了。</li>
+      <li>发现我们每次都是前缀加，单点求值。而且这个点具有单调性。可以变成全局加和差分。优化掉树状数组的$\log n$。</li>
+    </ul>
+    <p>复杂度 $n\log 10^9$。</p>
+    <p>对于区间并的长度和，同时维护一下就行了。</p>
+    <p>具体细节看代码吧</p>
+    <p>&nbsp;</p>
+    <pre><code class='language-cpp' lang='cpp'>typedef long long ll;
+int const maxn = 300003;
+int n = 0, K = 0;
+
+struct Operation { int l, r; };
+Operation a[maxn];
+// 珂朵莉珂爱
+struct Square {
+	Square(int L, int R = -1,int Iden = 0) : l(L), r(R), id(Iden) {}
+	int l, r, id;
+};
+inline bool operator&lt;(Square const &amp;lhs, Square const &amp;rhs) { return lhs.l == rhs.l ? lhs.r &lt; rhs.r : lhs.l &lt; rhs.l; }
+set&lt;Square&gt; s;
+using Ptr =  set&lt;Square&gt;::iterator;
+Ptr spilt(int cur) {
+	Ptr p = s.lower_bound(Square(cur));
+	if (p != s.end() &amp;&amp; p-&gt;l == cur) return p;
+	--p;
+	Square sqL(p-&gt;l, cur, p-&gt;id), sqR(cur, p-&gt;r, p-&gt;id);
+	s.erase(p); s.insert(sqL);
+	return s.insert(sqR).first;
+}
+struct Changes {
+	Changes(int Position, int Value) : pos(Position), v(Value) {}
+	int pos, v;
+};
+inline bool operator&lt;(Changes const &amp;lhs, Changes const &amp;rhs) { return lhs.pos &lt; rhs.pos; }
+vector&lt;Changes&gt; modi[maxn];
+void ApplyOperation(int OptId) {
+	Operation &amp;o = a[OptId];
+	Ptr rp = spilt(o.r), lp = spilt(o.l);
+	for (Ptr p = lp; p != rp; ++p)
+		modi[OptId].push_back(Changes(id&lt;-p, (p-&gt;r - p-&gt;l))); //focus
+	s.erase(lp, rp);
+	s.insert(Square(o.l, o.r, OptId));
+	sort(modi[OptId].begin(), modi[OptId].end());
+}
+ll ans = 0;
+ll delta[maxn];
+bool check(ll len) {
+	for (int i = 0; i &lt;= n + 1; ++i) delta[i] = 0;
+	ll U = 0, Sum = 0; // U=f[L], Sum = f[1]+...+f[L]
+	ll CntSq = 0, Tot = 0;
+	for (int R = 1, L = 1; R &lt;= n; ++R) {
+		U += a[R].r - a[R].l;
+		Sum += (ll)(a[R].r - a[R].l) * L;
+		delta[R + 1] = -(a[R].r - a[R].l);
+		for (auto const &amp;ch : modi[R]) {
+			if (ch.pos &lt; L) Sum -= (ll)ch.v * ch.pos;
+			else {
+				U -= ch.v;
+				Sum -= (ll)ch.v * L;
+				delta[ch.pos + 1] += ch.v;
+			}
+		}
+		while (U &gt;= len) {
+			U += delta[++L];
+			Sum += U;
+		}
+		CntSq += L - 1;
+		Tot += Sum - U;
+	}
+	if (CntSq &lt; K) return false;
+	ans = Tot - (CntSq - K) * len; // 最后一次成功时，多计数的那部分的长度一定是len
+	return true;
+}
+
+int main() {
+	scanf(&quot;%d %d&quot;, &amp;n, &amp;K);
+	for (int i = 1; i &lt;= n; ++i) scanf(&quot;%d %d&quot;, &amp;a[i].l, &amp;a[i].r);
+	s.insert(Square(1, 1000000000, 0));
+	for (int i = 1; i &lt;= n; ++i) ApplyOperation(i);
+	int len = 0;
+	for (int j = 30; ~j; --j) if (check(len | (1 &lt;&lt; j))) len |= (1 &lt;&lt; j);
+	printf(&quot;%lld&quot;, ans);
+	return 0;
+}
+</code></pre>
+    <p>&nbsp;</p>
+    <p>鸣谢 $\mathrm{j\color{red}iazhaopeng}$。</p>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

@@ -8,53 +8,56 @@
   <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
   <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华！">
   <meta name="author" content="Wankupi">
+  <link rel="preload" href="/Article/list.json" as="fetch" type="application/json" crossorigin>
   <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png" />
-  <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
+  <link rel="search" type="application/opensearchdescription+xml" href="/static/search.xml" title="Wankupi" />
   <script> var MathJax = { startup: { typeset: false }, tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, options: { enableMenu: false } }; </script>
-  <script id="MathJax-script" async src="https://cdn.bootcdn.net/ajax/libs/mathjax/3.1.2/es5/tex-chtml.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax/es5/tex-chtml.js"></script>
 </head>
 
 <body class="nocopy">
-  <header id="top-panel">
-    <span id="top-title">Wankupi's Blog</span>
-    <a id="about" href="/about">关于</a>
+  <header id="top-panel" class="top-panel">
+    <span class="clickable back-top" title="回到顶部">Wankupi's Blog</span>
+    <span><a href="/about">关于</a></span>
   </header>
-  <div id="Greet">
-    <div id="Name">
-      <div id="name-zh">王鲲鹏</div><div id="name-en">Wankupi</div>
-      <div id="PersonalSignature">其实，退役并不是那么难过，难过的是教练对你突然的宽容。</div>
+  <div class="full-screen Greet">
+    <div class="Name">
+      <span class="name-zh">王鲲鹏</span><span class="name-en">Wankupi</span>
+      <div class="grey">其实，退役并不是那么难过，难过的是教练对你突然的宽容。</div>
     </div>
-    <span class="scroll-down"><img class="up-down" alt="down" src="/static/images/down-arrow.png"></span>
+    <span class="scroll-down clickable"><img class="up-down" alt="down" src="/static/images/down-arrow.png"></span>
   </div>
   <main>
-    <nav id="Side" class="Side">
+    <nav class="side">
       <div id="hitokoto" class="side-card">
-        <h3><a href="https://hitokoto.cn/" rel="noopener noreferrer">一言</a><img alt="fresh" src="/static/images/restart.png" title="刷新"></h3>
+        <h3><a href="https://hitokoto.cn/" target="_blank" rel="noopener noreferrer" title="由hitokoto.cn提供一言支持">一言</a><img alt="fresh" src="/static/images/restart.png" title="刷新" class="clickable"></h3>
         <i>王鲲鹏最菜！</i>
-        <div id="hitokotoWho"></div>
+        <div id="hitokotoWho" class="quote-from"></div>
       </div>
-      <div id="FriendLinkBlock" class="side-card">
-        <h3>友链</h3>
+      <div class="side-card">
+        <h3>--&gt;<a href="/friends" title="友链">友链</a>&lt;--</h3>
       </div>
       <div class="side-card">
         <h3>公告&计划</h4>
         <div>虽已退役，不言AFO！</div>
+        <div><a href="/app/random" title="随机数">随机数</a></div>
       </div>
-      <div class="side-card" id="contact-me">
+      <div class="side-card contact-me">
         <a href="https://wpa.qq.com/msgrd?v=3&uin=2893353848&site=qq&menu=yes" title="qq" target="_blank" rel="noopener noreferrer"><img alt="QQ" src="/static/images/social-media/qq.png"></a>
         <a href="https://github.com/Wankupi" title="github" target="_blank" rel="noopener noreferrer"><img alt="github" src="/static/images/social-media/github.png"></a>
         <a href="https://codeforces.com/profile/Wankupi" title="codeforces" target="_blank" rel="noopener noreferrer"><img alt="codeforces" src="/static/images/social-media/codeforces.png"></a>
         <a href="https://www.luogu.com.cn/user/128771" title="luogu" target="_blank" rel="noopener noreferrer"><img alt="luogu" src="/static/images/social-media/luogu.ico"></a>
       </div>
     </nav>
-    <article id="articles"></article>
+    <article id="articles" class="articles"></article>
   </main>
   <footer>
-    <div>Copyright &copy; 2020~2020 Wankupi</div>
+    <div>Copyright &copy; 2020~2021 Wankupi</div>
     <div>个人博客 | 我说我是乱写</div>
     <div>站内文章采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode" target="_blank" rel="noopener noreferrer" class="license">CC BY-NC-SA 4.0 知识共享公共许可协议</a></div>
   </footer>
-  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
   <script> window.jQuery || document.write(unescape("%3Cscript src='/static/js/jquery/jquery.min.js' %3E%3C/script%3E")); </script>  
   <script src="/static/js/index.js" charset="UTF-8"></script>
 </body>

@@ -2,10 +2,16 @@
 <html lang="zh-Hans">
 
 <head>
-  <meta charset='UTF-8'>
-  <meta name='viewport' content='width=device-width initial-scale=1'>
-  <title>标题</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width initial-scale=1">
+$if(title)$
+  <title>$title$</title>
+$endif$
+$if(keywords)$
+  <meta name="keywords" content="$for(keywords)$$keywords$$sep$,$endfor$">
+$else$
   <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+$endif$
   <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
   <meta name="author" content="Wankupi">
   <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
@@ -13,7 +19,9 @@
 </head>
 
 <body>
-  <div id="contain" class="card"></div>
+<div class="card art-container">
+$body$
+</div>
   <div id="Comment" class="card"></div>
   <script src="/static/js/loads.js"></script>
 </body>

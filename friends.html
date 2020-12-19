@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="友链,友情链接,Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="我的朋友们！">
+  <meta name="author" content="Wankupi">
+  <title>友链 | Wankupi's Blog</title>
+  <link rel="stylesheet" href="/static/css/friends.css">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+</head>
+
+<body>
+  <header class="top-panel">
+    <a href="/">Wankupi's Blog</a>
+    <a href="/about">关于</a>
+  </header>
+  <div class="container">
+    <div class="card">
+      <h3>友链</h3>
+      <div class="item-con" id="friends"></div>
+    </div>
+  </div>
+  <script>
+    let con = document.getElementById("friends");
+    function fill_friends(fs) {
+      let mh = "";
+      for (let i = 0; i < fs.length; ++i) {
+        let f = fs[i];
+        let a = document.createElement("a");
+        a.innerHTML = `<img src="${f.avater}" alt="arater">${f.Name}`;
+        a.href = f.href;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.style.background = (f.bg || "#e6f2fa");
+        mh += `<div class="item">${a.outerHTML}</div>`;
+      }
+      con.innerHTML = mh;
+    }
+    fetch("/static/json/FriendLinks.json").then(r => r.json()).then(fill_friends);
+  </script>
+</body>
+
+</html>

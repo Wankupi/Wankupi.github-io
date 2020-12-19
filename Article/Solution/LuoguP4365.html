@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>[九省联考2018]秘密袭击coat</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+</head>
+
+<body>
+  <h1>[九省联考2018]秘密袭击coat</h1>
+  <div class="card art-container">
+    <h3>题面</h3>
+    <p>给定一棵 $n$ 个点的树，每个点有点权 $d$，满足 $d\le W$，和一个排名 $k$（$k\le n$），求</p>
+    <div>$$
+      \sum_{S\subset T}k\text{th of }S \qquad\text{S是连通块}
+      $$</div>
+    <p>$n\le 1666$，$W\le1666$。</p>
+    <h3>Solution</h3>
+    <p>既然有正解做法，还是想学习正解吖。重点分析了下个人理解困难的地方，跟zhang_RQ推的不是很一致的感觉/yun。可以去看 Miracle 的<a href='https://www.cnblogs.com/Miracevin/p/10402405.html'>文章</a>。</p>
+    <p>转化一下，（以下省略 $S$ 为连通块）</p>
+    <div>$$
+      \begin{aligned}
+      \sum_{S\in T}k\text{th of }S &amp;=\sum_{i=1}^Wi\sum_{S\in T}[k\text{th }S=i]\\
+      &amp;=\sum_{i=1}^W\sum_{S\in T}[k\text{th }S\ge i]\\
+      &amp;=\sum_{i=1}^W\sum_{S\in T}[cnt(S,i)\ge k]
+      \end{aligned}
+      $$</div>
+    <p>其中 $cnt(S,i)$ 表示 $S$ 中权值大于等于 $i$ 的点的数量。</p>
+    <p>把连通块放在最上面的点统计贡献，可以设 $f(x,i,j)$ 表示在 $x$ 的子树中选出连通块（必含自身），权值大于等于 $i$ 的点数为 $j$ 的方案数。转移不详细写了，就是树上背包的形式。设
+      $g[j]=\sum_{x=1}^{n}\sum_{i=1}^{W}f(x,i,j)$，答案是 $\sum_{j=k}^{W}g[j]$。这就是暴力的做法，复杂度可以做到 $O(n^2W)$。</p>
+    <p>把最后一维看成生成函数的系数，那么</p>
+    <div>$$
+      F[x,i]=(\prod_{y\in Son}F[y][i])\times\left\{\begin{matrix}
+      z &amp; d[x]\ge i\\
+      1 &amp; d[x]&lt;i
+      \end{matrix}
+      \right.
+      $$</div>
+    <p>多项式还是不好直接处理。从巨佬题解学到方法是，把它看成点值。点值就方便多了，一项就对应一项。</p>
+    <p>审视以下我们的状态，一维 $x$，表示哪个点；一维权值 $i$ ；$n+1$个点值。然而单看 $F[x][i]$ 的点值还是挺杂乱的，不妨先考虑一下一个叶子节点的 $F[x]$ 是什么样子。举例如下（$d[x]=3$）</p>
+    <div>$$
+      \begin{array}{|c|ccccc|}
+      \hline
+      \text{i\\z} &amp; 1 &amp; 2 &amp; 3 &amp; \cdots &amp; n+1\\
+      \hline
+      1 &amp; 1 &amp; 2 &amp; 3 &amp; \cdots &amp; n+1\\
+      2 &amp; 1 &amp; 2 &amp; 3 &amp; \cdots &amp; n+1\\
+      3 &amp; 1 &amp; 2 &amp; 3 &amp; \cdots &amp; n+1\\
+      4 &amp; 1 &amp; 1 &amp; 1 &amp; \cdots &amp; 1\\
+      \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+      W &amp; 1 &amp; 1 &amp; 1 &amp; \cdots &amp; 1\\
+      \hline
+      \end{array}
+      $$</div>
+    <p>发现竖着看的话，整个序列分成了两半。自变量 $z$ 的值可以提到最外层枚举，然后对每个点维护一棵线段树，下标 $i$ 表示多项式 $F[x][i]$ 在自变量为 $z$ 时的点值
+      。因为线段树合并的时候是整块合并，每个节点最初段数很少，所以复杂度是ok的。</p>
+    <p>具体而言要完成这样几个操作：
+      线段树全局设为 $1$；
+      $[1,d[x]]$ 乘 $z$；
+      全局 $+1$；
+      合并：对应位置相乘；
+      维护全局答案。</p>
+    <p>这一步可以通过构造一个神奇的运算完成（并不会自己构造）</p>
+    <p>定义元素 $(a,b,c,d)$，定义运算</p>
+    <div>$$
+      (a2,b2,c2,d2)\cdot(a2,b2,c2,d2)=(a1\cdot a2,b2+a2\cdot b1,c1+a1\cdot c2,d1+d2+b1\cdot c2)
+      $$</div>
+    <p>单位元 $(0,1,0,0)$。手推一下发现是满足结合律的。</p>
+    <p>令 $b=f$，$d=g$。剩下的主要就是构造了，就不细说了（<del>其实是不会</del>）。</p>
+    <p>当然我们只求出了点值，最后还要再拉格朗日插值，重新求出系数。我是看<a href='https://www.cnblogs.com/Miracevin/p/10158752.html'>这里</a>学的。</p>
+    <p>code:</p>
+    <pre><code class='language-cpp' lang='cpp'>#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+
+typedef long long ll;
+int const maxn = 1677;
+ll const mod = 64123;
+inline ll pls(ll a, ll b) { return a + b &lt; mod ? a + b : a + b - mod; }
+inline ll dec(ll a, ll b) { return a &gt;= b ? a - b : a - b + mod; }
+
+int n = 0, k = 0, W = 0;
+int d[maxn];
+int head[maxn], nxt[maxn &lt;&lt; 1], to[maxn &lt;&lt; 1], cnt = 0;
+inline void insert(int u, int e) { nxt[++cnt] = head[u]; head[u] = cnt; to[cnt] = e; }
+
+struct Data {
+	Data() {}
+	Data(int A, int B, int C, int D) : a(A), b(B), c(C), d(D) {}
+	void clear() { a = 1; b = c = d = 0; }
+	int a, b, c, d;
+};
+inline Data operator*(Data const &amp;A, Data const &amp;B) {
+  return Data(ll(A.a) * B.a % mod, pls(ll(A.b) * B.a % mod, B.b), pls(A.c, ll(A.a) * B.c % mod), pls(pls(A.d, B.d), ll(A.b) * B.c % mod));
+  // there do not mod, because it will be mod in Data(..)
+}
+struct Node {
+	Node() {}
+	void init() {
+		v.clear();
+		ls = rs = 0;
+	}
+	Data v;
+	int ls, rs;
+};
+Node tr[maxn * 50];
+int bin[maxn * 50];
+int cntNode = 0, binTop = 0;
+inline int newNode() {
+	int r = binTop ? bin[binTop--] : ++cntNode;
+	tr[r].init();
+	return r;
+}
+void delTree(int &amp;p) {
+	if (p == 0) return;
+	if (tr[p].ls) delTree(tr[p].ls);
+	if (tr[p].rs) delTree(tr[p].rs);
+	bin[++binTop] = p;
+	tr[p].init();
+	p = 0;
+}
+void pushdown(int p) {
+	if (tr[p].ls == 0) tr[p].ls = newNode();
+	if (tr[p].rs == 0) tr[p].rs = newNode();
+	tr[tr[p].ls].v = tr[tr[p].ls].v * tr[p].v;
+	tr[tr[p].rs].v = tr[tr[p].rs].v * tr[p].v;
+	tr[p].v.clear();
+}
+void modify(int &amp;p, int L, int R, int l, int r, Data const x) {
+	if (p == 0) p = newNode();
+	if (l &lt;= L &amp;&amp; R &lt;= r) { tr[p].v = tr[p].v * x; return; }
+	pushdown(p);
+	int mid = (L + R) &gt;&gt; 1;
+	if (l &lt;= mid) modify(tr[p].ls, L, mid, l, r, x);
+	if (r &gt; mid) modify(tr[p].rs, mid + 1, R, l, r, x);
+}
+int merge(int &amp;x, int &amp;y) { // 必须传引用 否则swap后del时会出错
+	if (tr[x].ls == 0 &amp;&amp; tr[x].rs == 0) std::swap(x, y);
+	if (tr[y].ls == 0 &amp;&amp; tr[y].rs == 0) {
+		tr[x].v = tr[x].v * Data(tr[y].v.b, 0, 0, tr[y].v.d);
+		return x;
+	}
+	pushdown(x);
+	pushdown(y);
+	merge(tr[x].ls, tr[y].ls);
+	merge(tr[x].rs, tr[y].rs);
+	return x;
+}
+
+ll querySumD(int p, int L, int R) {
+	if (L == R) return tr[p].v.d;
+	pushdown(p);
+	int mid = (L + R) &gt;&gt; 1;
+	int r = pls(querySumD(tr[p].ls, L, mid), querySumD(tr[p].rs, mid + 1, R));
+	return r;
+}
+
+int root[maxn];
+void dfs(int x, int const fa, int const z0) {
+	modify(root[x], 1, W, 1, W, Data(0, 1, 0, 0));
+	for (int i = head[x]; i; i = nxt[i]) {
+		if (to[i] == fa) continue;
+		dfs(to[i], x, z0);
+		modify(root[to[i]], 1, W, 1, W, Data(1, 1, 0, 0));
+		merge(root[x], root[to[i]]);
+		delTree(root[to[i]]);
+	}
+	modify(root[x], 1, W, 1, d[x], Data(z0, 0, 0, 0));
+	modify(root[x], 1, W, 1, W, Data(1, 0, 1, 0));
+}
+
+int inv[maxn];
+ll pv[maxn], g[maxn];
+
+void Lagrange() {
+	static int f[maxn], a[maxn];
+	f[0] = 1;
+	for (int i = 1; i &lt;= n + 1; ++i) {
+		for (int j = n + 1; j &gt;= 0; --j)
+			f[j] = pls(f[j] * ll(mod - i) % mod, (j &gt; 0 ? f[j - 1] : 0));
+	}
+	for (int i = 1; i &lt;= n + 1; ++i) {
+		for (int j = 0; j &lt;= n + 1; ++j) a[j] = f[j];
+		a[0] = a[0] * ll(mod - inv[i]) % mod;
+		for (int j = 1; j &lt;= n + 1; ++j)
+			a[j] = dec(a[j], a[j - 1]) * ll(mod - inv[i]) % mod;
+
+		ll k = pv[i];
+		for (int j = 1; j &lt;= n + 1; ++j)
+			if (j &lt; i) k = k * inv[i - j] % mod;
+			else if (i &lt; j) k = k * (mod - inv[j - i]) % mod;
+
+		for (int j = 0; j &lt;= n; ++j)
+			g[j] = pls(g[j], k * a[j] % mod);
+	}
+}
+
+int main() {
+	scanf(&quot;%d%d%d&quot;, &amp;n, &amp;k, &amp;W);
+	int x = 0, y = 0;
+	for (int i = 1; i &lt;= n; ++i) scanf(&quot;%d&quot;, d + i);
+	for (int i = 1; i &lt; n; ++i) {
+		scanf(&quot;%d%d&quot;, &amp;x, &amp;y);
+		insert(x, y);
+		insert(y, x);
+	}
+
+	inv[0] = inv[1] = 1;
+	for (int i = 2; i &lt;= n + 1; ++i) inv[i] = ll(mod - mod / i) * inv[mod % i] % mod;
+
+	for (int z = 1; z &lt;= n + 1; ++z) {
+		cntNode = binTop = 0;
+		dfs(1, 0, z);
+		pv[z] = querySumD(root[1], 1, W);
+		delTree(root[1]);
+	}
+	
+	Lagrange();
+	
+	int ans = 0;
+	for (int i = k; i &lt;= n; ++i) ans = pls(ans, g[i]);
+	printf(&quot;%d\n&quot;, ans);
+	return 0;
+}
+</code></pre>
+  </div>
+  <div id="Comment" class="card"></div>
+  <script src="/static/js/loads.js"></script>
+</body>
+
+</html>

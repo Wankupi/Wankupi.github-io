@@ -4,55 +4,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>全部文章 | Wankupi's Blog</title>
+  <title>文章列表 | Wankupi's Blog</title>
+  <link rel="preload" href="list.json" as="fetch" crossorigin>
   <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
   <link rel="stylesheet" href="/static/css/art-index.css">
+  <link rel="search" type="application/opensearchdescription+xml" href="/static/search.xml" title="Wankupi" />
   <script> var MathJax = { startup: { typeset: false }, tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, options: { enableMenu: false } }; </script>
-  <script id="MathJax-script" async src="https://cdn.bootcdn.net/ajax/libs/mathjax/3.1.2/es5/tex-chtml.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax/es5/tex-chtml.js"></script>
 </head>
 
 <body>
-  <header id="top-panel" class="center">
-    <div class="avatar"><img src="/static/images/icon.png" class="round"></div>
-    <div class="title">全部文章</div>
-    <div id="art-count">
-      <div class="lpart"></div>
-      <div class="rpart"></div>
-    </div>
-    <div>站内文章采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode" target="_blank" rel="noopener noreferrer" class="license">CC BY-NC-SA 4.0 知识共享公共许可协议</a>许可</div>
+  <header class="top-panel">
+    <div class="avatar"><img src="/static/images/icon.png" class="round no-select"></div>
+    <div class="title">文章列表</div>
+    <div id="art-count"></div>
+    <div>站内文章采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode" target="_blank"rel="noopener noreferrer" class="license">CC BY-NC-SA 4.0 知识共享公共许可协议</a> 许可。</div>
   </header>
   <main>
-    <article id="articles"></article>
+    <div id="articles" class="art-container"></div>
   </main>
-  <script>
-    let $ = (s => document.querySelectorAll(s));
-    let top_panel = $("#top-panel")[0], block = $("#articles")[0], lp = $("#art-count .lpart")[0], rp = $("#art-count .rpart")[0];
-    let count = {}, arts = [{ "title": "", "outline": "", "path": "", "type": "" }];
-    function putArts() {
-      let art_html = "";
-      for (let i = 0; i < arts.length; ++i) {
-        arts[i].type = arts[i].path.split("/")[0];
-        if (count[arts[i].type]) ++count[arts[i].type];
-        else count[arts[i].type] = 1;
-        art_html += `<div class="card"> <div class="title"><a href="${arts[i].path}">${arts[i].title}</a></div> <span class="type">[${arts[i].type}]</span><div class="outline">${arts[i].outline}</div> </div>`;
-      }
-      block.innerHTML = art_html;
-      for (let i in count) {
-        lp.innerHTML += `<span>${i}</span><br>`;
-        rp.innerHTML += `<span>${count[i]}</span><br>`;
-      }
-      if (MathJax.typesetPromise) MathJax.typesetPromise(); else MathJax.startup.typeset = true;
-    }
-    fetch("list.json").then(r => r.json()).then(s => { arts = s; putArts(); });
-    function scrollMove(e) {
-      let height = document.documentElement.clientHeight;
-      let H = document.documentElement.scrollTop;
-      if (H < height) {
-        top_panel.style.transform = "translateY(" + H / 5 + "px)";
-      }
-    }
-    document.addEventListener("scroll", scrollMove);
-  </script>
+  <script src="/static/js/art-index.js" charset="utf-8"></script>
 </body>
 
 </html>

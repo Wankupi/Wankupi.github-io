@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>[LNOI2014]LCA</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div class="card art-container">
+    <p>给出一棵有根树，多次询问，给出 $l,r,z$ 求</p>
+    <div>$$ \sum_{i=l}^{r}{dep[LCA(i,z)]} $$
+    </div>
+    <h4>题解</h4>
+    <p>首先观察到一个转化，$ dep[LCA(a,b)] $ 相当于在从 $a$ 到根的路径上每个点的点权加一，求 $b$ 到根节点的路径上的权值和。这样就避免了求 LCA 。</p>
+    <p>注意到对于一个询问的每一个迭代，都是同一个点 $z$ 和某点求$dep[LCA]$。先将所有 $[l,r]$ 中的点到根的路径都+1，最后一起查询，不影响结果。考虑使用树剖+数据结构。</p>
+    <p>进一步地，它满足可减性，即该过程可以用前缀和优化。</p>
+    <p>由于该题并没有强制在线，不妨先把询问离线下来，分为 $l-1$ 和 $r$ 两次查询。只求出当前前缀和，不保存先前的，从 $0$ 到 $n-1$ 逐点打 Tag，当扫到 $l-1$时，查询一次，减去当前答案；到 $r$ 时，再查一次，加上答案。可以用链式前向星或sort+双指针维护某位置的查询。维护区间加区间和可以考虑超级树状数组，好写好调。</p>
+    <p>考虑强制在线，只能考虑维护每个前缀和。只要换一个数据结构，使用线段树维护区间和、区间加，再使用可持久化就十分自然了。区间修改，为了减少新点，应该使用标记永久化。</p>
+    <p>&nbsp;</p>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

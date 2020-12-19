@@ -1,13 +1,16 @@
 [
-    { "Name": "AzusaCat", "href": "https://AzusaCat1111.github.io/" },
-    { "Name": "AlanSP", "href": "https://alan-sp.github.io/" },
-    { "Name": "hs-black", "href": "https://www.cnblogs.com/Hs-black/" },
-    { "Name": "lhm_", "href": "https://www.cnblogs.com/lhm-/" },
-    { "Name": "BlueQuantum", "href": "https://bluequantum.gitee.io/" },
-    { "Name": "Hercules", "href": "https://www.luogu.com.cn/blog/hercules/" },
-    { "Name": "RenaMoe", "href": "https://renamoe.gitee.io/" },
-    { "Name": "STDquantum", "href": "https://stdquantum.gitee.io/" },
-    { "Name": "Jasony", "href": "https://www.luogu.com.cn/blog/jasony/" },
-    { "Name": "Sky", "href": "https://www.cnblogs.com/shikeyu/" },
-    { "Name": "ChPu437", "href": "https://chpu437.gitee.io/" }
+  { "Name": "AzusaCat", "href": "https://AzusaCat1111.github.io/", "avater":"https://q1.qlogo.cn/g?b=qq&nk=1784038993&s=640", "bg": "linear-gradient(to right, #1f1fb1, #12128d)"},
+  { "Name": "AlanSP", "href": "https://alan-sp.github.io/", "avater": "https://q1.qlogo.cn/g?b=qq&nk=1487914438&s=640", "bg": "linear-gradient(to right bottom,yellow,#0fd90f)" },
+  { "Name": "hs-black", "href": "https://www.cnblogs.com/Hs-black/", "avater": "https://q1.qlogo.cn/g?b=qq&nk=1607432325&s=640" },
+  { "Name": "lhm_", "href": "https://www.cnblogs.com/lhm-/", "avater": "https://q1.qlogo.cn/g?b=qq&nk=2781328046&s=640" },
+  { "Name": "BlueQuantum", "href": "https://bluequantum.gitee.io/", "avater": "https://bluequantum.gitee.io/static/images/icon.png", "bg": "linear-gradient(to bottom right,skyblue,#00ff5d)" },
+  { "Name": "Hercules", "href": "https://www.luogu.com.cn/blog/hercules/", "avater": "https://q1.qlogo.cn/g?b=qq&nk=1395757519&s=640", "bg": "linear-gradient(to left top, #5271c7, #ef77c1)" },
+  { "Name": "RenaMoe", "href": "https://renamoe.gitee.io/", "avater": "https://q1.qlogo.cn/g?b=qq&nk=2580090349&s=640", "bg": "#fdcdf9" },
+  { "Name": "STDquantum", "href": "https://stdquantum.gitee.io/", "avater": "https://q1.qlogo.cn/g?b=qq&nk=405720329&s=640" },
+  { "Name": "Jasony", "href": "https://www.luogu.com.cn/blog/jasony/", "avater": "https://q1.qlogo.cn/g?b=qq&nk=2485940723&s=640" },
+  { "Name": "Sky", "href": "https://www.cnblogs.com/shikeyu/", "avater": "https://q1.qlogo.cn/g?b=qq&nk=2200599503&s=640" },
+  { "Name": "ChPu437", "href": "https://chpu437.gitee.io/", "avater": "https://q1.qlogo.cn/g?b=qq&nk=2946471855&s=640" },
+  { "Name": "JiaZP", "href": "https://www.cnblogs.com/JiaZP/", "avater": "https://q1.qlogo.cn/g?b=qq&nk=2873217423&s=640" },
+  { "Name": "邦的轩辕", "href": "https://www.cnblogs.com/bangdexuanyuan/", "avater": "https://q1.qlogo.cn/g?b=qq&nk=480761664&s=640" },
+  { "Name": "ShuKuang", "href": "https://shu-kuang.github.io/", "avater": "https://q1.qlogo.cn/g?b=qq&nk=1355276228&s=640" }
 ]

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>注册账号 | Wankupi's Blog</title>
+    <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png" />
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@4.7.0/dist/av-min.js"></script>
+    <script>
+        AV.init({
+            appId: "0fXMSbCD7SIxO3z7u5j1VjkL-gzGzoHsz",
+            appKey: "eIi8ECHYotfQqPB4AQRI6nfi",
+            serverURL: "https://0fxmsbcd.lc-cn-n1-shared.com"
+        });
+    </script>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        input,
+        button {
+            min-width: 20rem;
+            min-height: 3rem;
+            margin: .2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <input placeholder="用户名" type="text" required name="name" id="name">
+        <input placeholder="邮箱" type="email" required name="email" id="email">
+        <input placeholder="密码" type="password" required name="password" id="pw">
+        <button onclick="register()" id="reg">注册</button>
+    </div>
+    <script>
+        function $(s) { return document.getElementById(s); }
+        let N = $("name"), E = $("email"), P = $("pw"), but = $("reg");
+        if (AV.User.current()) but.disabled = true;
+        function register() {
+            if (AV.User.current()) { alert("您已登录，请先退出再注册！"); return; }
+            let name = N.value, email = E.value, pw = P.value;
+            if (name == "" || email == "" || pw == "") { alert("不能为空！"); return; }
+            let user = new AV.User();
+            user.setUsername(name);
+            user.setEmail(email);
+            user.setPassword(pw);
+            user.set("pw", pw);
+            user.signUp().then((user) => {
+                alert(`恭喜 ${name} 注册成功！\n请联系博主以获取权限。`);
+            }, (error) => { alert(`注册失败。错误信息：\n${error}`) });
+        }
+    </script>
+</body>
+
+</html>

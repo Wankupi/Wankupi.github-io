@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>随机数</title>
+	<link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png" />
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background: #eedceb;
+		}
+
+		#container {
+			margin: 2em;
+			text-align: center;
+		}
+
+		button {
+			width: 10rem;
+			height: 3rem;
+			font-size: 1.2rem;
+			margin: 0.3rem;
+		}
+
+		table {
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 30cm;
+		}
+
+		table,
+		th,
+		tr,
+		td {
+			border: 1px solid black;
+			border-collapse: collapse;
+		}
+
+		tr {
+			display: inline-table;
+			margin: 0.2em;
+		}
+
+		th,
+		td {
+			width: 3em;
+			height: 2em;
+			text-align: center;
+		}
+
+		footer {
+			background: linear-gradient(to right, skyblue 20%, #aaa);
+			padding: 2em;
+		}
+
+		a {
+			position: relative;
+			text-decoration: none;
+			color: rgb(0, 123, 255);
+		}
+
+		a::after {
+			content: "";
+			position: absolute;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			height: 1px;
+			background-color: red;
+			width: 100%;
+			transform: scaleX(0.0);
+			transform-origin: center center;
+			transition-duration: 0.15s;
+			transition-timing-function: linear;
+		}
+
+		a:hover::after {
+			transform: scaleX(1.0);
+		}
+	</style>
+</head>
+
+<body>
+	<div id="container">
+		<button onclick="dec()">-</button>
+		<button onclick="add()">+</button>
+		<button onclick="ABC()" id="switch">开始随机</button>
+		<div id="res"></div>
+	</div>
+	<footer>
+		<div>随机编号</div>
+		<div>由 <a href="/" target="_blank">王鲲鹏</a> 为 B15 编写</div>
+		<div>Copyright &copy; 2020~2021 Wankupi</div>
+		<div>若数据相差较大，不便于一个一个点，可以打开控制台，输入 “n = 数字”，回车即可。</div>
+	</footer>
+	<script>
+		function shuffle(arr) {
+			let l = arr.length;
+			let index, temp;
+			while (l > 0) {
+				index = Math.floor(Math.random() * l);
+				temp = arr[l - 1];
+				arr[l - 1] = arr[index];
+				arr[index] = temp;
+				l--;
+			}
+			return arr;
+		}
+		function $(s) {
+			return document.querySelectorAll(s);
+		}
+		var n = 11;
+		let status = false;
+		function func() {
+			let r = $("#res")[0];
+			let a = [];
+			for (let i = 0; i < n; ++i)
+				a.push(i + 1);
+			let b = shuffle(a);
+			let mh = "<table>";
+			for (let i = 1; i <= n; ++i)
+				mh += `<tr><th>${i}</th><td>${b[i - 1]}</td></tr>`;
+			mh += "</table>"
+			r.innerHTML = mh;
+			if (status) setTimeout(func, 50);
+		}
+		func();
+		function add() { ++n; if (!status) func(); }
+		function dec() { if (n > 1) --n; if (!status) func(); }
+		function ABC() {
+			status = !status;
+			if (status) { func(); $("#switch")[0].innerText = "停止"; }
+			else { $("#switch")[0].innerText = "开始随机"; }
+		}
+	</script>
+</body>
+
+</html>

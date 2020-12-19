@@ -1,37 +1,215 @@
 [
-  { "title": "装系统引发的灵异事件", "path": "Anecdotes/SysInst/", "outline": "晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕嘤晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕" },
-  { "title": "回忆录", "path": "Anecdotes/Memoir/", "outline": "" },
-  { "title": "CF264D Colorful Stones 题解", "path": "Solution/CF264D/", "outline": "部分借鉴了官方题解和这篇，<del>甚至还剽了他的图</del>。<br/>考虑如果现在有一个起始状态和终止状态，想知道能不能构造出一个串 $I$ 到达终止状态：..." },
-  { "title": "字典拓扑序", "path":"Summary/DicTopoOrder/", "outline": "关于拓扑序和字典序的总结。" },
-  { "title": "2020-12-01模拟赛", "path": "Contest/2020-12-01/", "outline": "较为正式（爆零）的模拟赛！" },
-  { "title": "模板总结", "path":"Summary/Template/", "outline": "" },
-  { "title": "2020-11-21模拟赛", "path": "Contest/2020-11-21/", "outline": "挂分/挂分/计数/状压+树形" },
-  { "title": "2020-11-14模拟赛", "path": "Contest/2020-11-14/", "outline": "今天时间不多了（改题太慢），简要记个思路" },
-  { "title": "[SDOI2017]苹果树", "path": "Solution/LuoguP3780/", "outline": "发现了几个很妙的处理方式，总结一下。<br>题意是在树上做一个多重背包，如果这个点选择了至少一个，父节点至少要选一个。同时允许在一条到根的链上每个点免费选一个。" },
-  { "title": "CSP2020-HE-Confusions", "path": "Anecdotes/CSP2020-HE-Confusions/", "outline": "CSP2020 河北迷惑行为" },
-  { "title": "2020-11-10 模拟赛", "path": "Contest/2020-11-10-a/", "outline": "竟然ak了一次！" },
-  { "title": "2020-11-09 模拟赛", "path": "Contest/2020-11-09/", "outline": "又双叒叕爆零哩" },
-  { "title": "CSP2020 游记", "path": "Anecdotes/CSP2020/", "outline": "水水水淼" },
-  { "title": "集合变换相关总结", "path": "Summary/SetTransform/", "outline": "本文多是自己的思考，代码涉及较少。" },
-  { "title": "2020-11-03 模拟赛", "path": "Contest/2020-11-03/", "outline": "今日的题解讲得甚为详细，所以今天只写一些纪事与感想。" },
-  { "title": "2020-11-02 模拟赛", "path": "Contest/2020-11-02/", "outline": "两个小时的时候进行了愚蠢操作导致前三题代码没了/jk" },
-  { "title": "2020-10-28 模拟赛", "path": "Contest/2020-10-28/", "outline": "AlanSP: 这套题出题人是屑（" },
-  { "title": "2020-10-26 模拟赛", "path": "Contest/2020-10-26/", "outline": "吐槽：竟然就是牛客原题。。。。。。。。" },
-  { "title": "Codeforces Round #679", "path": "Contest/CodeforcesRound679/", "outline": "咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕了好大一部分" },
-  { "title": "2020-10-24 模拟赛", "path": "Contest/2020-10-24/", "outline": "挂分严重...220 / 320 / 400." },
-  { "title": "2020-10-23 模拟赛", "path": "Contest/2020-10-23/", "outline": "" },
-  { "title": "CF1310C Au Pont Rough", "path": "Solution/CF1310C/", "outline": "$n \\leq 1000$，可以考虑 $O(n^2)$ 做法（~~我也不会低于 $n^2$ 的~~ <br> 先把所有的子串排序，只需要考虑如何快速比较两个串： 定义... " },
-  { "title": "CF1034D Intervals of Intervals", "path": "Solution/CF1034D/", "outline": "Description<br> 给定 $n$ 个区间 $[a_i,b_i]$，定义一个区间的区间 $[x,y]$ 的权值为 $x$ 到 $y$ 的区间的并的长度。要求选 $k$ 个不同的区间的区间，使权值和最大。" },
-  { "title": "LGV 引理", "path": "Summary/LGV-lemma/", "outline": "Lindstrom-Gessel-Viennot lemma" },
-  { "title": "CF1043F Make It One", "path": "Solution/CF1043F/", "outline": "给定一个数集，选出最少的元素使选出的数的 $\\gcd$ 为 $1$。值域为 $[1,300000]$。求最少选多少数。<br> 思路题。 观察到..." },
-  { "title": "莫比乌斯反演总结", "path": "Summary/Mobius/", "outline": "莫比乌斯反演的常见形式和题目举例。" },
-  { "title": "复数", "path": "Summary/Complex/", "outline": "形如z=a+bi（a, b均为实数）的数称为复数..." },
-  { "title": "杜教筛", "path": "Summary/DuJiaoShai/", "outline": "一种求积性函数的前缀和的方法<br>1.1一些前置知识狄利克雷乘积 Dirichlet product<br>对两个数论函数 $f$, $g$，定..." },
-  { "title": "Lucas定理的证明", "path": "Summary/Lucas/", "outline": "引理1<br>当 $p$ 是质数，$x$ 是小于 $p$ 的正整数， $\\binom{p}{x} \\mod p=0$。<br>证明∵..." },
-  { "title": "[国家集训队]middle", "path": "Solution/LuoguP2839/", "outline": "一言以蔽之： 二分套权值线段树<br> 1. 区间固定，不考虑复杂度，如何求解中位数？<br>暴力排..." },
-  { "title": "BSGS 大步小步算法", "path": "Summary/BSGS/", "outline": "已知 $a$，$b$，$m$ 求最小自然数解<br> $ a^x\\equiv b \\pmod m $<br> BSGS算法： <del>北上广深</del> 大步小步..." },
-  { "title": "[LNOI2014]LCA", "path": "Solution/[LNOI2014]LCA/", "outline": "给出一棵有根树，多次询问，给出 $l,r,z$ 求<br> $ \\sum_{i=l}^{r}{dep[LCA(i,z)]} $<br> 题解 ​ 首先观察到一..." },
-  { "title": "欧拉定理", "path": "Summary/EulerThorem/", "outline": "欧拉定理 \\( (x,m)=1 \\to x^{\\varphi(m)} \\equiv 1 \\pmod m \\) 证明<br>记模 $m$ 的既约剩余系为..." },
-  { "title": "错排数", "path": "Summary/AlternatePermutation/", "outline": "$n$ 的所有排列中满足 $\\forall i (p_i \\not= i)$ 的排列数量。<br>递推 $$ D_n=(n-1)(D_{n-1}+D_{n-2}) $$ 边界 $D_0=1$，$D_1=0$，$D_2=1$。 <br>先考虑向 $n-1$ 的排列中加入" },
-  { "title": "poj2054 Color a Tree", "path": "Solution/poj2054/", "outline": "给定一棵树和树根，每个点带权 $C$。第 $i$ 次选择一个点 $x_i$，满足父节点已经选过（或没有父节点），产生 $i\\cdot C_{x_i}$ 的代价。不可重复选择。求选尽所有点的最小代价。" }
+  {
+    "title": "poj2054 Color a Tree",
+    "path": "Solution/poj2054",
+    "outline": "给定一棵树和树根，每个点带权 $C$。第 $i$ 次选择一个点 $x_i$，满足父节点已经选过（或没有父节点），产生 $i\\cdot C_{x_i}$ 的代价。不可重复选择。求选尽所有点的最小代价。",
+    "date": "2020-08-27T02:52:00Z"
+  },
+  {
+    "title": "错排数",
+    "path": "Summary/AlternatePermutation",
+    "outline": "$n$ 的所有排列中满足 $\\forall i (p_i \\not= i)$ 的排列数量。递推 $ D_n=(n-1)(D_{n-1}+D_{n-2}) $。 边界 $D_0=1$，$D_1=0$，$D_2=1$。先考虑向 $n-1$ 的排列中加入...",
+    "date": "2020-08-23T13:12:00Z"
+  },
+  {
+    "title": "欧拉定理",
+    "path": "Summary/EulerThorem",
+    "outline": "欧拉定理 \\( (x,m)=1 \\to x^{\\varphi(m)} \\equiv 1 \\pmod m \\) 证明：记模 $m$ 的既约剩余系为..."
+  },
+  {
+    "title": "[LNOI2014]LCA",
+    "path": "Solution/[LNOI2014]LCA",
+    "outline": "给出一棵有根树，多次询问，给出 $l,r,z$ 求$\\sum_{i=l}^{r}{dep[LCA(i,z)]}$。题解：首先观察到一...",
+    "date": "2020-11-05T05:51:00Z"
+  },
+  {
+    "title": "BSGS 大步小步算法",
+    "path": "Summary/BSGS",
+    "outline": "已知 $a$，$b$，$m$ 求最小自然数解： $ a^x\\equiv b \\pmod m $。 BSGS算法： <del>北上广深</del> 大步小步...",
+    "date": "2020-07-23T11:07:00.000Z"
+  },
+  {
+    "title": "[国家集训队]middle",
+    "path": "Solution/LuoguP2839",
+    "outline": "一言以蔽之： 二分套权值线段树。1. 区间固定，不考虑复杂度，如何求解中位数？暴力排...",
+    "date": "2020-11-05T04:01:00Z"
+  },
+  {
+    "title": "Lucas定理的证明",
+    "path": "Summary/Lucas",
+    "outline": "引理1：当 $p$ 是质数，$x$ 是小于 $p$ 的正整数， $\\binom{p}{x} \\mod p=0$。证明∵..."
+  },
+  {
+    "title": "杜教筛",
+    "path": "Summary/DuJiaoShai",
+    "outline": "一种求积性函数的前缀和的方法。1.1一些前置知识狄利克雷乘积 Dirichlet product。对两个数论函数 $f$, $g$，定..."
+  },
+  {
+    "title": "复数",
+    "path": "Summary/Complex",
+    "outline": "形如z=a+bi（a, b均为实数）的数称为复数..."
+  },
+  {
+    "title": "莫比乌斯反演总结",
+    "path": "Summary/Mobius",
+    "outline": "莫比乌斯反演的常见形式和题目举例。"
+  },
+  {
+    "title": "CF1043F Make It One",
+    "path": "Solution/CF1043F",
+    "outline": "给定一个数集，选出最少的元素使选出的数的 $\\gcd$ 为 $1$。值域为 $[1,300000]$。求最少选多少数。思路题。 观察到...",
+    "date": "2020-10-06T07:28:00Z"
+  },
+  {
+    "title": "LGV 引理",
+    "path": "Summary/LGV-lemma",
+    "outline": "Lindstrom-Gessel-Viennot lemma",
+    "date": "2020-09-25T02:54:00Z"
+  },
+  {
+    "title": "CF1034D Intervals of Intervals",
+    "path": "Solution/CF1034D",
+    "outline": "Description：给定 $n$ 个区间 $[a_i,b_i]$，定义一个区间的区间 $[x,y]$ 的权值为 $x$ 到 $y$ 的区间的并的长度。要求选 $k$ 个不同的区间的区间，使权值和最大。",
+    "date": "2020-10-06T12:35:00Z"
+  },
+  {
+    "title": "CF1310C Au Pont Rough",
+    "path": "Solution/CF1310C",
+    "outline": "$n \\leq 1000$，可以考虑 $O(n^2)$ 做法（~~我也不会低于 $n^2$ 的~~ 先把所有的子串排序，只需要考虑如何快速比较两个串： 定义... ",
+    "date": "2020-10-14T12:14:00Z"
+  },
+  {
+    "title": "2020-10-23 模拟赛",
+    "path": "Contest/2020-10-23/",
+    "outline": ""
+  },
+  {
+    "title": "2020-10-24 模拟赛",
+    "path": "Contest/2020-10-24/",
+    "outline": "挂分严重...220 / 320 / 400."
+  },
+  {
+    "title": "Codeforces Round #679",
+    "path": "Contest/CodeforcesRound679/",
+    "outline": "咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕咕了好大一部分"
+  },
+  {
+    "title": "2020-10-26 模拟赛",
+    "path": "Contest/2020-10-26/",
+    "outline": "吐槽：竟然就是牛客原题。。。。。。。。"
+  },
+  {
+    "title": "2020-10-28 模拟赛",
+    "path": "Contest/2020-10-28/",
+    "outline": "AlanSP: 这套题出题人是屑（"
+  },
+  {
+    "title": "2020-11-02 模拟赛",
+    "path": "Contest/2020-11-02/",
+    "outline": "两个小时的时候进行了愚蠢操作导致前三题代码没了/jk"
+  },
+  {
+    "title": "2020-11-03 模拟赛",
+    "path": "Contest/2020-11-03/",
+    "outline": "今日的题解讲得甚为详细，所以今天只写一些纪事与感想。"
+  },
+  {
+    "title": "集合变换相关总结",
+    "path": "Summary/SetTransform",
+    "outline": "本文多是自己的思考，代码涉及较少。",
+    "date": "2020-11-04T11:37:00Z"
+  },
+  {
+    "title": "CSP2020 游记",
+    "path": "Anecdotes/CSP2020",
+    "outline": "水水水淼"
+  },
+  {
+    "title": "2020-11-09 模拟赛",
+    "path": "Contest/2020-11-09/",
+    "outline": "又双叒叕爆零哩"
+  },
+  {
+    "title": "2020-11-10 模拟赛",
+    "path": "Contest/2020-11-10-a/",
+    "outline": "竟然ak了一次！"
+  },
+  {
+    "title": "CSP2020-HE-Confusions",
+    "path": "Anecdotes/CSP2020-HE-Confusions/",
+    "outline": "CSP2020 河北迷惑行为"
+  },
+  {
+    "title": "[SDOI2017]苹果树",
+    "path": "Solution/LuoguP3780",
+    "outline": "发现了几个很妙的处理方式，总结一下。题意是在树上做一个多重背包，如果这个点选择了至少一个，父节点至少要选一个。同时允许在一条到根的链上每个点免费选一个。",
+    "date": "2020-11-12T10:10:00Z"
+  },
+  {
+    "title": "2020-11-14模拟赛",
+    "path": "Contest/2020-11-14/",
+    "outline": "今天时间不多了（改题太慢），简要记个思路。"
+  },
+  {
+    "title": "2020-11-21模拟赛",
+    "path": "Contest/2020-11-21/",
+    "outline": "挂分/挂分/计数/状压+树形"
+  },
+  {
+    "title": "模板总结",
+    "path": "Summary/Template",
+    "outline": "",
+    "date": "2020-12-01T14:20:00Z"
+  },
+  {
+    "title": "2020-12-01模拟赛",
+    "path": "Contest/2020-12-01/",
+    "outline": "较为正式（爆零）的模拟赛！"
+  },
+  {
+    "title": "字典拓扑序",
+    "path": "Summary/DicTopoOrder",
+    "outline": "关于拓扑序和字典序的总结。",
+    "date": "2020-12-03T03:53:00Z"
+  },
+  {
+    "title": "CF264D Colorful Stones 题解",
+    "path": "Solution/CF264D",
+    "outline": "部分借鉴了官方题解和这篇，<del>甚至还剽了他的图</del>。考虑如果现在有一个起始状态和终止状态，想知道能不能构造出一个串 $I$ 到达终止状态：...",
+    "date": "2020-12-03T00:52:00Z"
+  },
+  {
+    "title": "回忆录",
+    "path": "Anecdotes/Memoir",
+    "outline": ""
+  },
+  {
+    "title": "装系统引发的灵异事件",
+    "path": "Anecdotes/SysInst",
+    "outline": "晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕嘤晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕晕"
+  },
+  {
+    "title": "[九省联考2018]秘密袭击coat",
+    "path": "Solution/LuoguP4365",
+    "outline": "题面：给定一棵 $n$ 个点的树，每个点有点权 $d$，满足 $d\\le W$，和一个排名 $k$（$k\\le n$），求$$\\sum_{S\\subset T}k\\text{th of }S \\qquad\\text{S是连通块}$$ $n\\le 1666$，$W\\le1666$。Solution：既然有正解做法，还是想学习正解吖。",
+    "date": "2020-12-26T09:43:00Z"
+  },
+  {
+    "title": "2020年末总结",
+    "path": "Anecdotes/year2020",
+    "outline": "如果让我用一个词来形容我的2020，我第一个想到的词是兜兜转转，然后是丰富。",
+    "date": "2020-12-31T09:46:00.000Z"
+  },
+  {
+    "title": "概率统计(高中数学)",
+    "path": "Summary/Probability/primary",
+    "outline": "",
+    "date": "2021-01-03T10:40:00Z"
+  },
+  {
+    "title": "gym102759D",
+    "path": "Solution/gym102759D",
+    "outline": "给$n$个点构成无向图，两两之间都有边。其中一些边权是固定的，其他的边权是可以由你设置的。记 $C(i,j)$ 为边 $(i,j)$ 的权值。如果存在三个点 $i,j,k$ 使得 $C(i,j)&lt;C(i,k)$且$C(i,j)&lt;C(j,k)$，就不好。问你能否让这个图是好的，如果能还要最小化边权和，即最小化$$\\sum_{i=1}^{n}\\sum_{j=i+1}^nC(i,j)$$",
+    "date": "2021-02-07T02:12:00Z"
+  }
 ]

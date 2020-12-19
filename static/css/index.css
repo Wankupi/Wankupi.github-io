@@ -14,8 +14,8 @@
 
 body {
   font-family: "Microsoft YaHei", "Noto Sans CJK", source-sans-pro;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   overflow: overlay;
   word-break: break-word;
 }
@@ -58,10 +58,9 @@ h3 {
   margin-bottom: 0.5rem;
 }
 
-#top-panel {
+.top-panel {
   display: flex;
   position: fixed;
-  list-style: none;
   justify-content: space-around;
   align-items: center;
   top: 0;
@@ -72,45 +71,46 @@ h3 {
   z-index: 10;
   background-color: white;
   transition-duration: 0.4s;
-  box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.5);
 }
 
-#top-title {
+.clickable {
   cursor: pointer;
 }
 
-#Greet {
+.full-screen {
   display: block;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
+}
+
+.Greet {
   background: url("../images/background/home-greet-horizontal.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
 }
 
-#Name {
+.Name {
   display: block;
   position: relative;
   top: calc(37.2% - 2.25rem);
   text-align: center;
 }
 
-#name-zh {
+.name-zh {
   position: relative;
-  display: inline-block;
   font-family: "Microsoft YaHei";
   font-size: 4rem;
-  color: #000000;
 }
 
-#name-zh::after {
+.name-zh::after {
   content: "";
   position: absolute;
   height: 2px;
   width: 100%;
-  left: 0px;
-  bottom: 0px;
+  left: 0;
+  bottom: 0;
   background-color: rgba(0, 255, 255, 1.0);
   transform: scaleX(0.3);
   transform-origin: center center;
@@ -119,29 +119,27 @@ h3 {
   transition-timing-function: linear;
 }
 
-#name-zh:hover::after {
+.name-zh:hover::after {
   height: 2px;
   background-color: rgba(255, 0, 0, 1.0);
   transform: scaleX(1.15);
 }
 
-#name-en {
-  display: inline-block;
+.name-en {
   font-family: "Varela Round", "Comic Sans Ms";
   font-size: 3.5rem;
   color: #717070;
-  text-shadow: 0rem 0rem 0.4rem rgba(255, 255, 255, 1.0);
+  text-shadow: 0 0 0.4rem rgba(255, 255, 255, 1.0);
   transition-duration: 0.3s;
   transition-timing-function: cubic-bezier(1, .35, .51, .83);
 }
 
-#name-en:hover {
+.name-en:hover {
   color: rgb(255, 255, 255);
-  text-shadow: 0rem 0rem 0.4rem rgb(255, 208, 1.0);
+  text-shadow: 0 0 0.4rem rgb(255, 208, 1.0);
 }
 
-#PersonalSignature {
-  text-align: center;
+.grey {
   color: #666666;
 }
 
@@ -151,7 +149,6 @@ h3 {
   bottom: 5em;
   left: calc(50vw - 0.5 * 2rem);
   right: calc(50vw - 0.5 * 2rem);
-  cursor: pointer;
 }
 
 .scroll-down img {
@@ -161,18 +158,18 @@ h3 {
 main {
   margin-left: auto;
   margin-right: auto;
-  padding-top: 1rem;
   max-width: 30cm;
+  padding-top: 1rem;
 }
 
-nav.Side {
+nav.side {
   position: sticky;
+  width: calc(25% - 1em);
   top: 4rem;
-  right: 1rem;
   float: right;
   margin-top: 2rem;
   margin-bottom: 2rem;
-  width: calc(25% - 1em);
+  margin-right: 1rem;
 }
 
 .side-card {
@@ -184,49 +181,43 @@ nav.Side {
   text-align: center;
 }
 
-#hitokoto img {
+.side-card img {
   width: 1em;
   height: 1em;
   vertical-align: middle;
-  cursor: pointer;
 }
 
-#hitokotoWho {
+.quote-from {
   text-align: right;
   color: #555;
 }
 
-#hitokotoWho:empty {
+.quote-from:empty {
   visibility: hidden;
 }
 
-#hitokotoWho::before {
+.quote-from::before {
   content: "——";
 }
 
-.FriendLink {
-  position: relative;
-  min-height: 1.5rem;
-  transition-duration: 0.3s;
+.contact-me {
+  display: flex;
+  justify-content: space-around;
 }
 
-.FriendLink:hover {
-  box-shadow: 0 0 5px greenyellow;
-}
-
-.FriendLink>a:hover {
-  color: skyblue;
-}
-
-#contact-me img {
+.contact-me img {
   width: 1.5rem;
   height: 1.5rem;
+  transition: linear 0.2s;
 }
 
-#articles {
+.contact-me img:hover {
+  box-shadow: 0 0 3px black;
+}
+
+article.articles {
   min-height: 100vh;
   width: 75%;
-  left: 0px;
   padding-top: 2rem;
 }
 
@@ -271,12 +262,12 @@ nav.Side {
 }
 
 .card.more-art {
-  border-bottom: black 2px solid;
+  border-bottom: yellow 2px dotted;
 }
 
 .card.more-art .art-title {
-  font-family: "楷体";
-  font-size: 2rem;
+  font-family: "宋体";
+  font-size: 1.5rem;
 }
 
 footer {
@@ -305,15 +296,14 @@ a.license {
   color: white;
 }
 
-@media (max-aspect-ratio: 3/5) {
-  #Greet {
+@media (max-aspect-ratio: 3/5), (max-width: 40em) {
+  .Greet {
     background-image: url("../images/background/home-greet-vertical.jpg");
   }
-  nav.Side {
+  nav.side {
     position: unset;
     float: none;
     width: 90%;
-    right: 0;
     max-width: unset;
     margin-left: auto;
     margin-right: auto;
@@ -324,7 +314,7 @@ a.license {
     margin-left: 1rem;
     margin-right: 1rem;
   }
-  #articles {
+  article.articles {
     width: 100%;
     padding-top: 0;
   }

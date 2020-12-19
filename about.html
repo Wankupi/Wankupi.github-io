@@ -10,11 +10,31 @@
   <meta name="author" content="Wankupi">
   <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
   <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <style>
+    #top-panel {
+      display: flex;
+      position: sticky;
+      justify-content: space-around;
+      align-items: center;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3rem;
+      z-index: 10;
+      background-color: white;
+      transition-duration: 0.4s;
+      box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.5);
+    }
+  </style>
   <script src="/static/js/loads.js" async></script>
 </head>
 
 <body>
-  不知道写什么。。所以直接把留言板放这里好了。欢迎留言！
+  <header id="top-panel">
+    <a id="top-title" href="/">Wankupi's Blog</a>
+    <span>关于</span>
+  </header>
+
   <div id="Comment" class="card"></div>
 </body>
 
