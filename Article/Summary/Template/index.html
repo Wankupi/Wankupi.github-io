@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>模板总结</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <h1>模板总结</h1>
+  <div id="contain">
+    <div class="card" id="data-structure">
+      <h2>数据结构</h2>
+      <h4>树状数组</h4>
+      <p><strong>基本</strong>：</p>
+      <pre><code class='language-cpp' lang='cpp'>int n, tr[N];
+inline void add(int p, int v) { while (p &lt;= n) { tr[p] += v; p += lowbit(p); } }
+inline int query(int p) { int sum = 0; while (0 &lt; p) { sum += tr[p]; p -= lowbit(p); } return sum; }
+</code></pre>
+      <p>维护的是前缀和。可以把加减取反，维护后缀：</p>
+      <pre><code class='language-cpp' lang='cpp'>int n, tr[N];
+inline void add(int p, int v) { while (0 &lt; p) { tr[p] += v; p -= lowbit(p); } }
+inline int query(int p) { int sum = 0; while (p &lt;= n) { sum += tr[p]; p += lowbit(p); } return sum; }
+</code></pre>
+      <p><strong>超级树状数组</strong></p>
+      <pre><code class='language-cpp' lang='cpp'>class TreeArrey {
+public:
+	void add(int p, ll x) { while (p &lt;= N) { tree[p] += x; p += lowbit(p); } }
+	ll query(int p) { ll ret = 0; while (p) { ret += tree[p]; p -= lowbit(p); }return ret; }
+	ll query(int l, int r) { return query(r) - query(l - 1); }
+	ll tree[N + 1];
+};
+TreeArrey b, bi;
+inline void add(int l, int r, ll x) {
+	b.add(l, x);		b.add(r + 1, -x);
+	bi.add(l, x * l);	bi.add(r + 1, -x * (r + 1));
+}
+inline ll query(int p) { return (p + 1) * b.query(p) - bi.query(p); }
+inline ll query(int l, int r) { return query(r) - query(l - 1); }
+</code></pre>
+      <h4>线段树</h4>
+      <p>对复杂的题的惯用写法（示意）</p>
+      <pre><code class='language-cpp' lang='cpp'>struct Data {...};
+Data merge(...) {...} // 定义两边如何合并
+Data tr[N &lt;&lt; 2];
+void pushUp(int p, int L, int R) { /*...*/ tr[p] = merge(tr[p &lt;&lt; 1], tr[p &lt;&lt; 1 | 1]); /*...*/ };
+void pushDown(int p, int L, int R) { ... }
+void doSomething(int p, int L, int R, ...) {
+    if (L == R) { /*...*/ return; }
+    int mid = (L + R) &gt;&gt; 1;
+    pushDown(...);
+    /*...*/
+    pushUp(...);
+}
+</code></pre>
+      <p>动态开点：略。可持久化：略。
+        线段树合并：</p>
+      <pre><code class='language-cpp' lang='cpp'>int merge(int x, int y, int L, int R) {
+    if (x == 0 || y == 0) return x | y;
+    if (L == R) { /*...*/ }
+    int mid = (L + R) &gt;&gt; 1;
+    int p = x or ++cntNode; // 是否需要这样取决于需不要要持久化。
+    ls[p] = merge(ls[x], ls[y]);
+}
+</code></pre>
+      <p>线段树分裂：不会，咕。</p>
+      <h4>平衡树</h4>
+      <h5>splay</h5>
+      <h5>treap</h5>
+      <h5>替罪羊</h5>
+      <p>以上都咕。</p>
+      <h4>LCT</h4>
+      <p>咕</p>
+      <h4>可并堆</h4>
+      <pre><code class='language-cpp' lang='cpp'>// 小根堆
+int merge(int x, int y) {
+	if (x == 0 || y == 0) return x | y;
+	if (val[x] == val[y] ? x &gt; y : val[x] &gt; val[y]) swap(x, y);
+	son[x][1] = merge(son[x][1], y);
+	if (dis[son[x][0]] &lt; dis[son[x][1]]) swap(son[x][0], son[x][1]);
+	dis[x] = son[x][1] ? dis[son[x][1] + 1 : 0;
+	return x;
+}
+inline int pop(int x) { return merge(son[x][0], son[x][1]); }
+</code></pre>
+    </div>
+    <div class="card" id="math">
+      <h2>数学</h2>
+      <h4>欧几里得算法</h4>
+      <pre><code class='language-cpp' lang='cpp'>int gcd(int a, int b) { return b ? gcd(b, a % b) : a; }
+struct Result {
+	Result(int _d, int _x, int _y) : d(_d), x(_x), y(_y) {}
+	int d, x, y;
+};
+Result exgcd(int a, int b) {
+	if (b == 0) return Result(a, 1, 0);
+	Result r = exgcd(b, a % b);
+	return Result(r.d, r.y, r.x - (a / b) * r.y);
+}
+</code></pre>
+      <h4>快速幂</h4>
+      <pre><code class='language-cpp' lang='cpp'>Type pow(Type x, int b) {
+    Type r(1);
+    while (b) { if (b &amp; 1) r = r * x; x = x * x; b &gt;&gt;= 1; }
+    return r;
+}
+</code></pre>
+      <h4>中国剩余定理</h4>
+      <pre><code class='language-cpp' lang='cpp'>M[0] = 1;
+for (int i = 1; i &lt;= n; ++i) {
+	scanf(&quot;%lld%lld&quot;, m + i, a + i);
+	M[0] *= m[i];
+}
+ll sum = 0;
+for (int i = 1; i &lt;= n; ++i) {
+	M[i] = M[0] / m[i];
+	ll inv = (exgcd(M[i], m[i]).x + m[i]) % m[i];
+	sum = (sum + a[i] * M[i] % M[0] * inv % M[0]) % M[0];
+}
+printf(&quot;%lld&quot;, sum);
+</code></pre>
+      <h5>扩展中国剩余定理(exCRT)</h5>
+      <pre><code class='language-cpp' lang='cpp'>ll b1 = 0, a1 = 0;
+void combine(ll b2, ll a2) {
+	Result r = gcd(a1, a2);
+	r.x = (r.x % (a2 / r.d) + a2 / r.d) % (a2 / r.d);
+	ll m = a1 / r.d * a2;
+	//ll x = ((r.x * (b2 - b1) / r.d) * a1 + b1) % m;
+	ll x = (muti(muti((b2 - b1) / r.d, r.x, m), a1, m) + b1) % m; //注意muti函数中调用的顺序，避免第二个为负数
+	a1 = m;
+	b1 = (x % a1 + a1) % a1;
+}
+int main() {
+	int n = 0;
+	scanf(&quot;%d&quot;, &amp;n);
+	ll a = 0, b = 0;
+	scanf(&quot;%lld%lld&quot;, &amp;a1, &amp;b1);
+	for (int i = 2; i &lt;= n; ++i) {
+		scanf(&quot;%lld%lld&quot;, &amp;a, &amp;b);
+		combine(b, a);
+	}
+	printf(&quot;%lld&quot;, b1);
+	return 0;
+}
+</code></pre>
+      <h4>Lucas 定理</h4>
+      <pre><code class='language-cpp' lang='cpp'>ll Lucas(ll n, ll m, ll p) {
+	if (m == 0) return 1;
+	return Lucas(n / p, m / p, p) * binom(n % p, m % p, p) % p;
+}
+</code></pre>
+      <h5>扩展卢卡斯定理(exLucas)</h5>
+      <p>先把模数拆成质数幂，最后EXCRT合并。</p>
+      <pre><code class='language-cpp' lang='cpp'>inline ll inv(ll a, ll mod) {
+	Result r = gcd(a, mod);
+	return ((r.x % mod) + mod) % mod;
+}
+
+ll p = 0, pc = 0; // 质因子是p，因子是pc
+ll s[1000003];
+
+void init() {
+	s[0] = 1;
+	for (int i = 1; i &lt;= pc; ++i) {
+		s[i] = s[i - 1];
+		if (i % p != 0) s[i] = s[i] * i % pc;
+	}
+}
+ll fact(ll n) { // 排除 i\equiv p 的那些数
+	if (n == 0 || n == 1) return 1;
+	ll loop = pow(s[pc], n / pc, pc), leave = s[n % pc];
+	return fact(n / p) * loop % pc * leave % pc;
+}
+ll g(ll n) { // [1, n] 包含多少因子p -&gt; 用于计算i\equiv p的那些数字。
+	if (n &lt; p) return 0;
+	return g(n / p) + (n / p);
+}
+struct Eq { ll b, m; }; // 等式：用于lucas合并
+Eq GetBinomMod(ll n, ll m) {
+	Eq e;
+	e.m = pc;
+	ll N = fact(n), M = inv(fact(m), pc), N_M = inv(fact(n - m), pc);
+	ll pm = pow(p, g(n) - g(m) - g(n - m), pc);
+	e.b = N * M % pc * N_M % pc * pm % pc;
+	return e;
+}
+Eq res;
+void Combine(Eq eq) { /* ... */ }
+int main() {
+	ll n = 0, m = 0, mod = 0;
+	scanf(&quot;%lld%lld%lld&quot;, &amp;n, &amp;m, &amp;mod);
+	for (ll i = 2; i * i &lt;= mod; ++i)
+		if (mod % i == 0) {
+			pc = p = i;
+			mod /= i;
+			while (mod % i == 0) { pc *= i; mod /= i; }
+			init();
+			Eq e = GetBinomMod(n, m);
+			Combine(e);
+		} 
+	if (mod != 1) {
+		pc = p = mod;
+		init();
+		Eq e = GetBinomMod(n, m);
+		Combine(e);
+	}
+	printf(&quot;%lld&quot;, res.b);
+	return 0;
+}
+</code></pre>
+      <h4>线性筛</h4>
+      <p>略。</p>
+      <h4>辛普森积分(Simpson)</h4>
+      <pre><code class='language-cpp' lang='cpp'>inline double Simpson(double L, double R) {
+	return (R - L) * (f(L) + f(R) + 4 * f((L + R) / 2)) / 6;
+}
+double calc(double l, double r, double ans) {
+	double mid = (l + r) / 2.0;
+	double lRes = Simpson(l, mid), rRes = Simpson(mid, r);
+	if (abs(lRes + rRes - ans) &lt; eps) return lRes + rRes;
+	return calc(l, mid, lRes) + calc(mid, r, rRes);
+}
+</code></pre>
+      <h4>MillerRabin 素性探测</h4>
+      <pre><code class='language-cpp' lang='cpp'>ll const prime[] = { 2, 3, 5, 7, 11, 13, 17, 19, 23 };
+bool MRtest(ll n, ll a) {
+	if (n == a) return true;
+	if (pow(a, n - 1, n) != 1) return false;
+	ll k = n - 1;
+	while (k /= 2) {
+		ll r = pow(a, k, n);
+		if (r == n - 1) return true;
+		if (r != 1) return false;
+		if (k &amp; 1) break;
+	}
+	return true;
+}
+inline bool MillerRabin(ll n) {
+	if (n == 0 || n == 1) return false;
+	if (n == 2) return true;
+	if (n % 2 == 0) return false;
+	for (ll a : prime)
+		if (a &lt;= n &amp;&amp; MRtest(n, a) == false)
+			return false;
+	return true;
+}
+</code></pre>
+      <h4>PollardRho</h4>
+      <p>需要先确定 $n$ 是一个合数。</p>
+      <pre><code class='language-cpp' lang='cpp'>ll f(ll x, ll c, ll mod) { return (muti(x, x, mod) + c) % mod; }
+ll PollardRho(ll n) {
+	ll s = 0, t = 0, c = rand() % (n - 1) + 1;
+	for (int goal = 1; ; goal &lt;&lt;= 1, s = t) {
+		ll val = 1;
+		for (int step = 1; step &lt;= goal; ++step) {
+			t = f(t, c, n);
+			val = muti(val, abs(t - s), n);
+			if (step % 127 == 0) {
+				ll d = gcd(val, n);
+				if (d &gt; 1) return d;
+			}
+		}
+		ll d = gcd(val, n);
+		if (d &gt; 1) return d;
+	}
+}
+</code></pre>
+      <h4>BSGS</h4>
+      <p><a href='/Article/Summary/BSGS/'>博客链接</a>。</p>
+      <pre><code class='language-cpp' lang='cpp'>ll A[50000], B[50000];
+ll bsgs(ll a, ll b, ll m) {
+	ll s = ceil(sqrt(m));
+	A[0] = 1;
+	map&lt;ll, ll&gt; has;
+	for (ll i = 1; i &lt;= s; ++i) {
+		A[i] = A[i - 1] * a % m;
+		if (A[i] == b) return i;
+		has[A[i]] = i;
+	}
+	ll invs = Inv(A[s], m);
+	B[0] = b;
+	for (ll i = 1; i &lt;= s; ++i) {
+		B[i] = B[i - 1] * invs % m;
+		if (has.find(B[i]) != has.end())
+			return has[B[i]] + s * i;
+	}
+	return -1;
+}
+ll exbsgs(ll a, ll b, ll m) {
+	if (m == 1 || b == 1) return 0;
+	ll g = 0, k = 0, da = 1;
+	while ((g = gcd(a, m).d) &gt; 1) {
+		if (b % g != 0) return -1;
+		++k;
+		b /= g;
+		m /= g;
+		da = da * a / g % m;
+		if (da == b) return k;
+	}
+	ll res = bsgs(a, b * Inv(da, m) % m, m);
+	return res &lt; 0 ? -1 : res + k;
+}
+</code></pre>
+      <h4>拉格朗日插值</h4>
+      <pre><code class='language-cpp' lang='cpp'>mutiL[0] = mutiL[n + 1] = mutiR[0] = mutiR[n + 1] = 1;
+for (int i = 1; i &lt;= n; ++i)
+	mutiL[i] = (mutiL[i - 1] * (k - x[i])) % mod;
+for (int i = n; i &gt;= 1; --i)
+	mutiR[i] = (mutiR[i + 1] * (k - x[i])) % mod;
+ll ans = 0;
+for (int i = 1; i &lt;= n; ++i) {
+	ll mu = 1;
+	for (int j = 1; j &lt;= n; ++j)
+		if (i != j)
+			mu = (mu * (x[i] - x[j])) % mod;
+	if (mu &lt; 0) mu += mod;
+	mu = pow(mu, mod - 2);
+	ans = (ans + (((y[i] * mutiL[i - 1] % mod) * mutiR[i + 1] % mod) * mu % mod)) % mod;
+}
+ans = (ans + mod) % mod;
+</code></pre>
+      <h4>高斯消元</h4>
+      <p>略</p>
+      <h4>矩阵逆</h4>
+      <pre><code class='language-cpp' lang='cpp'>ll w[403][807];
+inline bool Gauss() {
+	for (int i = 1; i &lt;= n; ++i) {
+		if (w[i][i] == 0)
+			for (int j = i + 1; j &lt;= n; ++j)
+				if (w[j][i]) {
+					for (int t = i; t &lt;= n &lt;&lt; 1; ++i) swap(w[i][t], w[j][t]);
+					break;
+				}
+		if (w[i][i] == 0) return false;
+		ll a = pow(w[i][i], mod - 2);
+		for (int t = i; t &lt;= n &lt;&lt; 1; ++t)
+			w[i][t] = w[i][t] * a % mod;
+		for (int j = 1; j &lt;= n; ++j)
+			if (i != j) {
+				a = w[j][i];
+				for (int t = i; t &lt;= n &lt;&lt; 1; ++t)
+					w[j][t] = (w[j][t] - a * w[i][t] % mod + mod) % mod;
+			}
+	}
+	return true;
+}
+</code></pre>
+      <h4>杜教筛</h4>
+      <p><a href='/Article/Summary/DuJiaoShai/'>链接</a>。</p>
+      <h4>二次剩余</h4>
+      <p>先咕着。</p>
+      <h4>多项式</h4>
+      <p>咕</p>
+    </div>
+    <div class="card" id="graph">
+      <h2>图论</h2>
+      <h4>临接表</h4>
+      <p>特殊地，当是棵树并且输入给出的是节点的父亲时，可以直接</p>
+      <pre><code class='language-cpp' lang='cpp'>int head[maxn], nxt[maxn];
+inline void insert(int u, int e) { nxt[e] = head[u]; head[u] = e; }
+</code></pre>
+      <h4>点分治</h4>
+      <p>略</p>
+      <h4>无向图三元环计数</h4>
+      <pre><code class='language-cpp' lang='cpp'>#include &lt;cstdio&gt;
+#include &lt;vector&gt;
+using namespace std;
+int const maxn = 200003;
+int n = 0, m = 0;
+int X[maxn], Y[maxn], d[maxn];
+vector&lt;int&gt; G[maxn]; //用vector会快：连续内存访问
+int tag[maxn];
+int main() {
+	scanf(&quot;%d %d&quot;, &amp;n, &amp;m);
+	for (int i = 1; i &lt;= m; ++i) {
+		scanf(&quot;%d %d&quot;, X + i, Y + i);
+		++d[X[i]]; ++d[Y[i]];
+	}
+	for (int i = 1; i &lt;= m; ++i) {
+		if (d[X[i]] &gt; d[Y[i]] || (d[X[i]] == d[Y[i]] &amp;&amp; X[i] &gt; Y[i]))
+            std::swap(X[i], Y[i]);
+		G[X[i]].push_back(Y[i]);
+	}
+	int ans = 0;
+	for (int x = 1; x &lt;= n; ++x) {
+		for (auto i : G[x]) tag[i] = x;
+		for (auto y : G[x])
+			for (auto z : G[y])
+				if (tag[z] == x)
+					++ans;
+	}
+	printf(&quot;%d&quot;, ans);
+	return 0;
+}
+</code></pre>
+      <h4>长链剖分</h4>
+      <pre><code class='language-cpp' lang='cpp'>int fa[19][maxn];
+int dep[maxn], len[maxn], son[maxn], top[maxn];
+int dfn[maxn], cdfn = 0;
+int up[maxn], down[maxn];
+void dfs1(int x) {
+	dep[x] = dep[fa[0][x]] + 1;
+	for (int j = 1; j &lt;= 18; ++j)
+		fa[j][x] = fa[j - 1][fa[j - 1][x]];
+	for (int i = head[x]; i; i = nxt[i]) {
+		dfs1(to[i]);
+		if (len[to[i]] &gt; len[son[x]]) son[x] = to[i];
+	}
+	len[x] = len[son[x]] + 1;
+}
+void dfs2(int x, int t) {
+	top[x] = t;
+	if (x == t) {
+		dfn[x] = cdfn + 1;
+		cdfn += len[x];
+		for (int i = 1, y = x; i &lt;= len[x]; ++i, y = fa[0][y])
+			up[dfn[x] + i - 1] = y;
+		for (int i = 1, y = x; i &lt;= len[x]; ++i, y = son[y])
+			down[dfn[x] + i - 1] = y;
+	}
+	if (son[x]) dfs2(son[x], t);
+	for (int i = head[x]; i; i = nxt[i])
+		if (to[i] != son[x]) dfs2(to[i], to[i]);
+}
+int lg2[maxn];
+inline int GetFa(int x, int k) {
+	if (k == 0) return x;
+	int j = lg2[k];
+	int y = top[fa[j][x]];
+	k -= dep[x] - dep[y];
+	return k &gt;= 0 ? up[dfn[y] + k] : down[dfn[y] - k];
+}
+</code></pre>
+      <h4>最小生成树</h4>
+      <p>Kruskal, Prim, Boruvka。</p>
+      <h4>Johnson全源最短路</h4>
+      <p>略</p>
+      <h4>k短路</h4>
+      <p>略</p>
+    </div>
+    <div class="card" id="string">
+      <h2>字符串相关</h2>
+      <h4>最小表示法</h4>
+      <pre><code class='language-cpp' lang='cpp'>#include &lt;cstdio&gt;
+int n = 0;
+int a[600001];
+int main() {
+	scanf(&quot;%d&quot;, &amp;n);
+	for (int i = 1; i &lt;= n; ++i) {
+		scanf(&quot;%d&quot;, a + i);
+		a[i + n] = a[i];
+	}
+	int i = 1, j = 2, k = 0;
+	while (i &lt;= n &amp;&amp; j &lt;= n) {
+		if (i == j) ++j;
+		k = 0;
+		while (k &lt; n &amp;&amp; a[i + k] == a[j + k]) ++k;
+		if (k &gt;= n) break;
+		if (a[i + k] &lt; a[j + k]) j += k + 1;
+		else i += k + 1;
+	}
+	i = (i &lt; j ? i : j);
+	for (int p = i; p - i + 1 &lt;= n; ++p) printf(&quot;%d &quot;, a[p]);
+	return 0;
+}
+</code></pre>
+      <h4>trie树</h4>
+      <pre><code class='language-cpp' lang='cpp'>int tr[N][26], rt = 1, cnt = 1;
+bool isEnd[N];
+void insert(char *s) {
+	int p = rt;
+	while (*s) {
+		int c = *s++ - &#39;a&#39;;
+		if (tr[p][c]) tr[p][c] = ++cnt;
+		p = tr[p][c];
+	}
+	isEnd[p] = true;
+}
+</code></pre>
+      <h4>kmp</h4>
+      <pre><code class='language-cpp' lang='cpp'>void kmp() {
+	nxt[1] = 0;
+	for (int i = 2; i &lt;= n; ++i) {
+		nxt[i] = nxt[i - 1];
+		while (nxt[i] &amp;&amp; s[i] != s[nxt[i] + 1]) nxt[i] = nxt[nxt[i]];
+		if (s[i] == s[nxt[i] + 1]) ++nxt[i];
+	}
+}
+</code></pre>
+      <h5>扩展kmp</h5>
+      <pre><code class='language-cpp' lang='cpp'>int z[maxn], p[maxn];
+void getNxt(char *s, int n) {
+	z[1] = n;
+	for (int i = 2, l = 0, r = 0; i &lt;= n; ++i) {
+		if (i &lt;= r) z[i] = min(z[i - l + 1], r - i + 1);
+		while (i + z[i] &lt;= n &amp;&amp; s[i + z[i]] == s[z[i] + 1]) ++z[i];
+		if (i + z[i] - 1 &gt; r) { l = i; r = i + z[i] - 1; }
+	}
+}
+void exkmp(char *s, int n, char *t, int m) {
+	getNxt(t, m);
+	for (int i = 1, l = 0, r = 0; i &lt;= n; ++i) {
+		if (i &lt;= r) p[i] = min(z[i - l + 1], r - i + 1);
+		while (i + p[i] &lt;= n &amp;&amp; s[i + p[i]] == t[p[i] + 1]) ++p[i];
+		if (i + p[i] - 1 &gt; r) { l = i; r = i + p[i] - 1; }
+	}
+}
+int lenS = 0, lenT = 0;
+char s[maxn], t[maxn];
+int main() {
+	scanf(&quot;%s&quot;, s + 1);
+	scanf(&quot;%s&quot;, t + 1);
+	lenS = strlen(s + 1);
+	lenT = strlen(t + 1);
+	exkmp(s, lenS, t, lenT);
+	return 0;
+}
+</code></pre>
+      <h4>manacher</h4>
+      <p>略。</p>
+      <h4>后缀数组</h4>
+      <p>排序：</p>
+      <pre><code class='language-cpp' lang='cpp'>int n = 0;
+char s[maxn];
+int sa[maxn];
+int A[maxn], B[maxn], t[maxn];
+int *rank = A, *tp = B;
+int m = 0;
+inline void Qsort() {
+	for (int i = 0; i &lt;= m; ++i) t[i] = 0;
+	for (int i = 1; i &lt;= n; ++i) ++t[rank[i]];
+	for (int i = 1; i &lt;= m; ++i) t[i] += t[i - 1];
+	for (int i = n; i &gt;= 1; --i) sa[t[rank[tp[i]]]--] = tp[i];
+}
+void SAsort() {
+	m = 256;
+	for (int i = 1; i &lt;= n; ++i) rank[i] = s[i], tp[i] = i;
+	Qsort();
+	for (int len = 1, p = 0; p &lt; n &amp;&amp; len &lt; n; m = p, len &lt;&lt;= 1) {
+		p = 0;
+		for (int i = 1; i &lt;= len; ++i) tp[++p] = n - len + i;
+		for (int i = 1; i &lt;= n; ++i) if (sa[i] &gt; len) tp[++p] = sa[i] - len;
+		Qsort();
+		tp[sa[1]] = p = 1;
+		for (int i = 2; i &lt;= n; ++i) tp[sa[i]] = (rank[sa[i - 1]] == rank[sa[i]] &amp;&amp; rank[sa[i - 1] + len] == rank[sa[i] + len] ? p : ++p);
+		std::swap(rank, tp);
+	}
+}
+</code></pre>
+      <p>求 Height 数组：</p>
+      <pre><code class='language-cpp' lang='cpp'>void getHeight() {
+	for (int i = 1, k = 0; i &lt;= n; ++i) {
+		if (rank[i] == 1) { k = height[1] = 0; continue; }
+		if (k) --k;
+		int j = sa[rank[i] - 1];
+		while (i + k &lt;= n &amp;&amp; s[i + k] == s[j + k]) ++k;
+		height[rank[i]] = k;
+	}
+}
+</code></pre>
+      <h4>AC自动机</h4>
+      <pre><code class='language-cpp' lang='cpp'>void getFail() {
+	queue&lt;int&gt; q;
+	for (int i = 0; i != 26; ++i)
+		if (tri[0][i]) {
+			fail[tri[0][i]] = 0;
+			q.push(tri[0][i]);
+			insert(0, tri[0][i]);
+		}
+	while (!q.empty()) {
+		int x = q.front(); q.pop();
+		for (int i = 0; i != 26; ++i) {
+			if (tri[x][i]) {
+				fail[tri[x][i]] = tri[fail[x]][i];
+				q.push(tri[x][i]);
+				insert(tri[fail[x]][i], tri[x][i]);
+			}
+			else tri[x][i] = tri[fail[x]][i];
+			++ind[tri[fail[x]][i]];
+		}
+	}
+}
+</code></pre>
+    </div>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

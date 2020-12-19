@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>模拟赛总结 2020-12-01</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <h1>模拟赛(formal) 2020-12-01</h1>
+  <div id="contain" class="card">
+    <h2>T4 求余数 mod</h2>
+    <blockquote>
+      <p>求有多少长度为 $n$ 的序列 $a_1,a_2,\dots,a_n$，满足 $1\le a_i\le m$，且 $\forall i\not=j,\gcd(a_i,a_j)=1$。$n\le10^5$，$m\le 100$。</p>
+    </blockquote>
+    <p>首先就得有个直觉是不是 $1$ 的数应该不多，为 $\pi(100)=25$。所以可以考虑枚举有 $i$ 位不是 $1$，贡献就是 $\binom{n}{i}f(i)i!$。其中 $f(i)$ 表示选 $i$ 个非 $1$ 的数互质的方案数。</p>
+    <p>一个朴素的 dp 是设 $f(i,S)$ 表示选了 $i$ 个数，它们的质因子集合的并为 $S$ 的方案数。转移就是考虑添加一个数 $x$ ，它的质因子集合为 $T$，</p>
+    <div>$$ f(i,S)=\left\{\begin{array}[cc]{} f(i,S)+f(i-1,S-T) &amp; T\subset S \\ f(i,S) &amp; T \not\subset S \end{array}\right. $$
+    </div>
+    <p>发现这样第二维是 $2^{25}$，大概可以本地打表。因为大于 $\sqrt{m}$ 的质因数最多有一个，按大于 $10$ 的质因子是什么来分组。组内最多选择一个，可以在循环顺序上来保证；没有质因子大于 $10$ 的数，一个一个加进去就行。于是只用状压 $2,3,5,7$ 这四个质数。</p>
+    <p>不大于 $10$：这里我把它们存到了<code>a[1]</code>中</p>
+    <pre><code class='language-cpp' lang='cpp'>for (int j = 0; j &lt; int(a[1].size()); ++j) {
+	int x = a[1][j];
+	for (int st = 0; st &lt; (1 &lt;&lt; 4); ++st) {
+		if ((st &amp; g[x]) != g[x]) continue;
+		for (int i = 30; i &gt;= 1; --i) // 这里可以更紧亿点，从 4 开始就行，因为最多选 4 个
+			dp[i][st] = (dp[i][st] + dp[i - 1][st ^ g[x]]) % mod;
+	}
+}
+</code></pre>
+    <p>对于大于 $10$ 的：</p>
+    <pre><code class='language-cpp' lang='cpp'>for (int i = 2; i &lt;= m; ++i) {
+	if (a[i].size() == 0) continue; // 懒得按质数枚举了
+	for (int p = 30; p &gt;= 1; --p) { // 先枚举选几个！这里上界是 \pi(m)
+		for (int st = 0; st &lt; (1 &lt;&lt; 4); ++st) 
+			for (int j = 0; j &lt; int(a[i].size()); ++j) {
+				int x = a[i][j];
+				if ((st &amp; g[x]) != g[x]) continue;
+				dp[p][st] = (dp[p][st] + dp[p - 1][st ^ g[x]]) % mod;
+			}
+	}
+}
+</code></pre>
+    <p>最后加起来就行了</p>
+    <pre><code class='language-cpp' lang='cpp'>for (int i = 0; i &lt;= 30; ++i) {
+	f[i] = 0; // 多测清空
+	for (int j = 0; j &lt; 16; ++j)
+		f[i] = (f[i] + dp[i][j]) % mod;
+}
+</code></pre>
+    <p>我都直接开了 30 是因为懒得一个个 memset...或者写一些判断，为了赶时间...然鹅还是没调完。</p>
+    <p>求答案</p>
+    <pre><code class='language-cpp' lang='cpp'>int ans = 0;
+for (int i = 0; i &lt;= min(m, 30); ++i)
+	ans = (ans + (long long)f[i] * ifact[n - i] % mod) % mod;
+ans = (long long)ans * fact[n] % mod;
+</code></pre>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>模拟赛总结 2020-10-28</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div id="contain" class="card">
+    <h1>模拟赛总结 2020-10-28</h1>
+    <blockquote>
+      <p>AlanSP： 这套题出题人是屑（</p>
+      <p>确实。</p>
+    </blockquote>
+    <h3>T1 饥饿的小鸟(river)</h3>
+    <blockquote>
+      <p>一群饥饿的小鸟，要到河对岸吃东西。河的宽度为 $N$ 米，小鸟每飞行 $L$ 米就必须在一片荷叶上休息一下，才能够继续飞行。当然，小鸟们也可以选择没飞够 $L$ 米就先休息一下，但不能一次飞超过 $L$ 米。 距离小鸟们出发的河岸一侧距离为 $i$ 的荷叶共有 $A_i$ 片，每片荷叶在有小鸟停于上方休息后， 就会沉入水底，不能够再供其他小鸟休息。 现在想要知道，至多有多少只小鸟能够抵达对岸。</p>
+    </blockquote>
+    <p>同学们大多写的 $O(n\log^2n)$ 的贪心，我不会贪心...所以写的 $O(n)$ 。 可以证明答案是所有长度为 $L$ 的段的区间和的最小值。显然有区间和是上界，只需证明它同时是下界。 如果 $k$ 满足任意长为 $L$ 的段的区间和不小于 $k$，至少可以飞 $k$ 个小鸟。略。</p>
+    <p>&nbsp;</p>
+    <h3>T2 进化序列(evolve)</h3>
+    <blockquote>
+      <p> 求区间或和小于一个常数的区间数量。</p>
+    </blockquote>
+    <p>随便了吧...二分+树状数组/线段树 $O(n\log^2n)$。二分可以用双指针优化掉，显然满足单调。</p>
+    <p>也可以单调栈，但写题解的人不会分析复杂度说是 $O(n)$，但其实是带着 $\log_2 2^{31}$ 的。</p>
+    <p>&nbsp;</p>
+    <h3>T3 旅行(travel)</h3>
+    <blockquote>
+      <p><a target="_blank" href="./problems.pdf">pdf 题面链接</a>（太长了谔谔（包括其他题）</p>
+    </blockquote>
+    <p>zzz: 二合一太屑了。</p>
+    <p>题目可以分为两部分，第一部分求出 $F[i]$，第二部分求期望。 求 $F[i]$ 可以用各种数据结构+树剖等乱搞，最简洁的是维护一个dfs栈，直接找 $D[i]$ 级祖先，然后树上差分，复杂度 $O(n)$ 。 求期望...我觉得关键的思想在于把上下拆开，分两遍，用换根dp算，这是很妙的点。至于求平方的期望，就是在恶心人。。只要知道怎么将子树合并到自己，简单推一下式子：
+    </p>
+    <div>$$ E((x+y)^2)=E(x^2+y^2+2xy)=E(x^2)+E(y^2)+2E(xy) $$
+    </div>
+    <p>因为 $x$ 和 $y$ 是独立的，$E(xy)=E(x)E(y)$。维护一次的期望和平方的期望。换根的时候注意顺序和意义。</p>
+    <p>&nbsp;</p>
+    <h3>T4 平衡树(splay)</h3>
+    <blockquote>
+      <p>给一棵二叉树，每个点有权值 $w$，支持对某个点左旋、右旋，查询子树所有点的子树权值和和的积。</p>
+    </blockquote>
+    <p>原题面比较鬼，第一反应是模拟。。发现旋转不仅影响两个点的子树权值和，还会影响到根链上点的答案。树的形态会发生改变，所以一般的树剖等就不适用了... LCT...调不动...于是打了暴力，还没打对。。</p>
+    <p>想到了能不能把这个东西从树上分离到序列上，然后开始尝试前序遍历，发现旋转前后这些子区间以整体为变化。可以考虑关于序列提取、插入、查询区间积这一类...splay大概也能干了。太复杂没时间写了。</p>
+    <p>这道题启示我要善于发现不变量。</p>
+    <p>在平衡树上zig和zag不会改变什么呢？中序遍历。（就差一点呜呜呜）假如旋转前是 [[A,1,B],2,C] ，旋转后可能是 [A,1,[B,2,C]]（1,2是旋转相关的点，ABC分别是子树）。顺序没变而覆盖范围变了。1,2的值变了。这样就可以上一个支持单点修改、区间查询积的数据结构了。树状数组是有风险的，因为数字的加法是可能产生 $0$ 的，如果乘上去就删不掉了。但是出题人不认真。</p>
+    <p>还长了个教训、、数据范围是 $2e5$，然后我看着表格里的最大的数 $1e5$ 就以为是范围。。</p>
+    <h4>代码链接</h4>
+    <ul>
+      <li><a target="_blank" href="./river.cpp">饥饿的小鸟(river)</a></li>
+      <li><a target="_blank" href="./evolve.cpp">进化序列(evolve)</a></li>
+      <li><a target="_blank" href="./travel.cpp">旅行(travel)</a></li>
+      <li><a target="_blank" href="./splay.cpp">平衡树(splay)</a></li>
+    </ul>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

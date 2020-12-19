@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>膜拜AzusaCat</title>
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@4.7.0/dist/av-min.js"></script>
+  <script>
+    AV.init({
+      appId: "0fXMSbCD7SIxO3z7u5j1VjkL-gzGzoHsz",
+      appKey: "eIi8ECHYotfQqPB4AQRI6nfi",
+      serverURL: "https://0fxmsbcd.lc-cn-n1-shared.com"
+    });
+  </script>
+</head>
+
+<body>
+  <div class="contain">
+    <img src="https://q1.qlogo.cn/g?b=qq&nk=1784038993&s=640" class="avatar">
+    <div style="height: 2rem;"></div>
+    <div>AzusaCat 已被膜拜了总计 <span id="Count">inf</span><span id="Addition"></span> 次！快快继续膜她吧！</div>
+    <button onclick="Mobai()">膜拜AzusaCat</button>
+  </div>
+  <div id="userLogIn" style="display:none">
+    <div>
+      <span>用户名：</span>
+      <input type="text" name="Name" id="Name">
+    </div>
+    <div>
+      <span>密码：</span>
+      <input type="password" name="password" id="password">
+    </div>
+    <button onclick="logIn()">登录</button>
+    <div id="LogInInformation"></div>
+  </div>
+  <button onclick="logOut()" style="display: none;" id="LogOutButton">登出</button>
+  <script>
+    const data = AV.Object.createWithoutData('Worship', '5f9a20cd9deac83e3b7652c1');
+    const query = new AV.Query('Worship');
+    let addition = 0;
+    let isLogIn = (AV.User.current() != null);
+    async function fresh() {
+      if (data.dirty()) await data.save();
+      let res = await query.get('5f9a20cd9deac83e3b7652c1');
+      document.getElementById('Count').innerText = res.get('Count');
+      document.getElementById('Addition').innerText = '';
+      addition = 0;
+    }
+    fresh();
+    var loop = setInterval(fresh, 15 * 1000);
+
+    function Mobai() {
+      if (!isLogIn) {
+        document.getElementById('LogInInformation').innerText = "请先登录";
+        return -1;
+      }
+      data.increment('Count', 1);
+      ++addition;
+      document.getElementById('Addition').innerText = `(+${addition})`;
+    }
+
+    function logIn() {
+      let Name = document.getElementById('Name').value;
+      let pw = document.getElementById('password').value;
+      AV.User.logIn(Name, pw).then((user) => {
+          document.getElementById('userLogIn').style.display = "none";
+          document.getElementById('LogOutButton').style.display = "block";
+          isLogIn = true;
+        })
+        .catch(error => {
+          document.getElementById('LogInInformation').innerText = "登录失败，请重试。";
+        });
+    }
+
+    function logOut() {
+      AV.User.logOut();
+      isLogIn = false;
+      document.getElementById('LogOutButton').style.display = "none";
+      document.getElementById('userLogIn').style.display = "block";
+    }
+    if (!isLogIn)
+      document.getElementById('userLogIn').style.display = "block";
+    else
+      document.getElementById('LogOutButton').style.display = "block";
+  </script>
+  <style>
+    div.contain {
+      display: block;
+      max-width: 1200px;
+      margin: 2em auto 2rem auto;
+      text-align: center;
+    }
+    
+    img.avatar {
+      margin: auto auto auto auto;
+      width: 640px;
+      height: 640px;
+      border-radius: 320px;
+    }
+    
+    button {
+      min-width: 10rem;
+      min-height: 3rem;
+      font-size: 1.5rem;
+      background-color: skyblue;
+    }
+  </style>
+</body>
+
+</html>

@@ -1,0 +1,152 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 1.2rem;
+  background-color: #e3fdfd;
+}
+
+.center {
+  text-align: center;
+}
+
+#top-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 80vh;
+  background-color: #cbf1f5;
+  background-image: url("/static/images/background/art-top.jpg");
+  background-position: center top;
+  background-size: cover;
+  user-select: none;
+}
+
+#top-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+#top-panel>* {
+  position: relative;
+}
+
+.avatar {
+  position: relative;
+  width: 10em;
+  height: 10em;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 5em;
+  overflow: hidden;
+  backdrop-filter: blur(5px) brightness(0.9);
+}
+
+.avatar>img {
+  width: 100%;
+}
+
+header>.title {
+  font-size: 2em;
+}
+
+#art-count {
+  width: 21em;
+}
+
+#art-count>* {
+  display: inline-block;
+  width: 10em;
+}
+
+#art-count>.lpart {
+  text-align: right;
+  padding-right: 0.5rem;
+}
+
+#art-count>.rpart {
+  text-align: left;
+  padding-left: 0.5rem;
+  border-left: 2px black solid;
+}
+
+main {
+  padding: 1em;
+}
+
+#articles {
+  display: block;
+  position: relative;
+  max-width: 30cm;
+  margin-top: -3em;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1em;
+  border-radius: 1em;
+  background-color: #ffffff;
+  box-shadow: 2px 5px 10px black;
+}
+
+.card {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  transition-duration: 0.5s;
+  border-radius: 0.3em;
+}
+
+.card:hover {
+  background-color: #f4f7f7;
+}
+
+#articles {
+  counter-reset: art-number;
+}
+
+.card .title {
+  display: inline-block;
+}
+
+.card>.title::before {
+  counter-increment: art-number;
+  content: counter(art-number) " : ";
+}
+
+.card .type {
+  font-size: 1rem;
+  font-style: italic;
+  color: grey;
+}
+
+a {
+  text-decoration: none;
+  color: #93b5cf;
+}
+
+@keyframes round {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.round {
+  animation: round 3s ease-in-out infinite;
+}
+
+a.license {
+  color: blueviolet;
+  font-weight: bold;
+}

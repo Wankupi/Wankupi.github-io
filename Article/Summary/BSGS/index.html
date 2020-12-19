@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>BSGS 大步小步</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div id="contain" class="card">
+    <h1>BSGS</h1>
+    <p>已知 $a$， $b$， $m$ 求最小自然数解</p>
+    <div>$$ a^x\equiv b \pmod m $$
+    </div>
+    <p><strong>BSGS算法： <del>北上广深</del> 大步小步算法</strong></p>
+    <p>特殊情况: </p>
+    <ul>
+      <li>$b = 1$ -&gt; $x = 0$ </li>
+      <li>$a = 0$，若 $b = 0$，$x=1$，否则无解。 </li>
+      <li>$b = 0$，若 $a^x\equiv 0 \pmod m$ ，$km=a^x,k \in \mathbb{Z}$，则$k\frac{m}{(a,m)}=\frac{a\cdot a^{x-1}}{(a,m)}$，递归判断直至 $m$ 等于 1 即可。</li>
+    </ul>
+    <h4>当 $(a,m)=1$</h4>
+    <p>根号处理，预处理 $a^i$ 和 $a^{jS}$，其中$S \approx \sqrt{m}$， $i &lt; S$， 设$x=jS+i$（带余除法），则有 $a^{jS+i}\equiv b\pmod m$，$a^i\equiv b\cdot a^{-jS}\pmod m$。 </p>
+    <p>预处理复杂度$\sqrt{m}$，二分查询判断是否存在$a^i\equiv b\cdot a^{-jS} \pmod m$ 复杂度$\log \sqrt{m}$， </p>
+    <p>最坏复杂度$\sqrt{m}\log\sqrt{m}$ （如果找不到）。</p>
+    <p>&nbsp;</p>
+    <h4>当 $(a,m) = d > 1$</h4>
+    <p>易证明不是特殊情况时，$d \mid b$。</p>
+    <div>$$ a \cdot a^{x-1} \equiv b \pmod m \\ \frac{a}{d}\cdot a^{x-1} \equiv \frac{b}{d} \pmod{\frac{m}{d}}\\ $$
+    </div>
+    <p>因为 $(\frac{a}{d},\frac{m}{d})=1$ ，所以 $\frac{a}{d}$ 存在模 $\frac{m}{d}$ 意义下的逆元，</p>
+    <div>$$ a^{x-1} \equiv \frac{b}{d} \cdot (\frac{a}{d})^{-1}\pmod{\frac{m}{d}} $$
+    </div>
+    <p>递归处理，直至$(a,m)=1$。</p>
+    <p>&nbsp;</p>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

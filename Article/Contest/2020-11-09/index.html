@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>模拟赛总结 2020-11-09</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div id="contain">
+    <h1>模拟赛总结 2020-11-09</h1>
+    <div class="card">
+      <a href="problem.pdf" target="_blank">pdf题面连接</a> 淘淘和蓝蓝似乎是启智树...
+
+      <h3>淘淘蓝蓝之游戏</h3>
+      <p>一开始没仔细看数据范围，不会做。做完T2向上滚动，才发现数据范围有点怪...具体来说，观察到 $1\leq a\leq 10000$，而 $b\leq 1000$，$k \ge 1000$，会发现 $ka$ 总是大于 $b$，$a$的影响完全大于$b$的，直接把第一关键字设为$a$，$b$为第二关键字降序排序，再分别求出 $a,b$ 的前缀和就行。</p>
+      <p>代码：<a href="games.cpp">games.cpp</a></p>
+
+      <h3>淘淘蓝蓝与保温箱</h3>
+      (pdf中题目名错了)
+      <p>应该没有贪心做法吧...我想到的都hack掉了。暴力地设 $f[i][j][k]$ 表示考虑到第$i$个箱子，选择了$j$个，这$j$个的$\sum{b}$为$k$时，最大的$\sum{a}$。 就是个背包，然后滚动掉第一维，空间$O(n \sum{b})$，时间$O(n^2\sum{b})$。
+      </p>
+      <p>当时写错了一句，60分无。
+        <pre><code>for (int j = 1; j <= n; ++j) {
+    ans[j] = n + 10;
+    for (int p = sa; p <= sumb; ++p) ans[j] = min(ans[j], sa - f[j][p]);
+        if (ans[j] == n + 10) ans[j] = -1;
+}</code></pre>脑抽觉得 $n$ 差不多就是最大值了..emmm..实际应该设为inf或者大于$\sum{a}$的值。
+      </p>
+      <p>代码：<a href="box.cpp">box.cpp</a></p>
+
+
+      <h3>淘淘蓝蓝之树林</h3>
+      <p>又是考场不会考后发现很简单/ll...弄个墙，然后跑bfs，路径一定是跨过这个墙的，所以是每个点两边的最短路相加取最小值。</p>
+      <p>代码：<a href="forest.cpp">forest.cpp</a></p>
+
+
+      <h3>淘淘蓝蓝之扮猪吃愉悦</h3>
+      <p>题目测试数据稍微有点锅...有很多自环，点的编号也乱了...完全不是一棵树/xk。改题的时候，一开始忽略了有 $n=1$的情况，对叶节点判断是用的 $d[x]=1$，改为$d[x] \le 1$就可以了。</p>
+      <p>代码：<a href="pigeatyy.cpp">pigeatyy.cpp</a></p>
+    </div>
+
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

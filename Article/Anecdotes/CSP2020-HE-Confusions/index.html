@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>CSP2020 HE 迷惑行为</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div id="contain">
+    <h1>CSP2020 HE 迷惑行为</h1>
+    <div class="card">
+      <h3>前言</h3>
+      <p>俗话说，错误能使人进步。本文依据公开的选手源代码，整理了HE的oier们出现的一些错误。并不是针对某个选手，仅是想找到一些普遍的错误，以为警戒。同时欢迎各位将自己的更细微（不能直接看出来的）错误投稿。对所有为本文有贡献的oier表示感谢！对所有为梦想拼搏的oier们表示祝福！</p>
+    </div>
+    <div class="card">
+      <h3>文件系列</h3>
+      <p>注释freopen人（其中有4例除外，是注释里有注释掉的freopen）</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbAlM8.png">
+      <p>写反（错）文件读入方式人</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbAMxf.png"> <img src="https://s1.ax1x.com/2020/11/09/BbAFKO.png">
+      <p>外人</p>
+      <img src="https://s3.ax1x.com/2020/11/12/BxQfyT.png">
+      <p>读答案人</p>
+      <img src="https://s3.ax1x.com/2020/11/12/BxYCtg.png">
+      <p>毒蛇人</p>
+      <img src="https://s3.ax1x.com/2020/11/13/D98ShD.png">
+      <p>吃小人</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbA1sS.png">
+      <p>snkaes人</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbAPxK.png">
+      <p>sankes & 额外文件人</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbAKRP.png">
+      <p>随机骗分失败人</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbAAqe.png">
+      <p>符号错误人</p>
+      <img src=https://s1.ax1x.com/2020/11/09/BbAVVH.png>
+      <img src="https://s3.ax1x.com/2020/11/12/BxQuz6.png">
+      <p>无事发生人</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbAuGt.png">
+      <p>多余文件人（虽然没问题..</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbA98x.png">
+      <p>//"人"</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbAC26.png">
+      <p>无名人</p>
+      <img src="https://s1.ax1x.com/2020/11/09/Bbm4VU.png">
+      <p>关闭指定文件人</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbnDL6.png">
+      <p>双号人</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbuDpj.png">
+    </div>
+    <div class="card">
+      <p>超大数组人</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbAnPI.png">
+      <p>高维人</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbuqHK.png">
+      <p>___带师</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbKE4g.png">
+      <p>没有文件输入输出 & 630行大佬</p>
+      <img src="https://s1.ax1x.com/2020/11/09/BbKJC4.png">
+      <p>pinyinren（还拼错了<br /><code>ask(hanshu[f].C); // buziruhechuli"3"dezhezhongqingkuang,xiangtongguo vector jiejue;</code></p>
+      <p>OR人</p>
+      <img src="https://s3.ax1x.com/2020/11/12/BxM0a9.png">
+      <p>Windows人</p>
+      <img src="https://s3.ax1x.com/2020/11/12/Bx39zt.png">
+    </div>
+
+    <div class="card">
+      <p>统计了一下HE一共有319个文件夹上传，其中有235人次找不到源文件...70人次编译失败(应该编译返回值是1就是失败吧...?)...惨...以下公开处刑...（误</p>
+      <a href="check.sh" target="_blank">程序(bash)</a>
+      <button onclick="getCompileData()">显示结果</button>
+      <button onclick="setComileData('')">隐藏</button>
+      <div id="results"></div>
+      <script>
+        let requested = false;
+        let compileData;
+
+        function setComileData(s) {
+          document.getElementById("results").innerText = s;
+        }
+
+        function getCompileData() {
+          if (!requested)
+            fetch("result.html").then(r => {
+              requested = true;
+              return r.text();
+            }).then(s => {
+              compileData = s;
+              setComileData(s);
+            });
+          else setComileData(compileData);
+        }
+      </script>
+    </div>
+
+    <div class="card">
+      <h3>CE 错误总结</h3>
+      摘选了一些比较有代表性的错误。
+      <ul>
+        <li>静态数组的大小必须在编译时已知。变量一般得有个名字。以下代码中数组g的和某大数组的声明不合法。
+          <pre><code>struct M{
+	int f,fa,fb,fc,fd;
+	int g[fd];
+}[100005];</code></pre>这还引出一个问题，g++编译时，局部数组的大小是可以用变量的。但这其实是非法的行为，不可移植。
+        </li>
+        <li>忘加分号。（一份输出样例的代码因此编译失败</li>
+        <li>没有声明变量就使用，或是变量不可达。(这不是python或是js！！</li>
+        <li>函数实参和形参不匹配（数量，类型），比如<code>fclose("julian.in",stdin);</code>来自一份打表代码，不然能有点分。</li>
+        <li>超大数组（即便题目没有空间限制，计算机内存也是有限的...过大无法寻址）<code>int a[100000000000000];</code></li>
+        <li>非数组当成数组用...一维数组当二维用...</li>
+        <li>提前结束了块<pre><code>for (int i = 0; i &lt; Q; i++) {
+  cin >> r[i];
+}
+if (r[i] == 10) {
+</code></pre></li>
+        <li>括号不匹配</li>
+        <li>main返回值必须是int。<code>long long main() {</code></li>
+        <li>命名冲突。如同时using namespace std和使用next做变量名...</li>
+        <li>手滑：<code>if(n==2&&&m==2&&c==4&&k==3)</code></li>
+        <li>不存在的类型转换。<code>srand(int(new char));</code>首先使用new出来的地址做随机种子这种行为是危险且不负责的。建议开long long转换。c风格类型转换也是不推荐的。</li>
+        <li>定义类型后要加分号<img src="https://s3.ax1x.com/2020/11/12/Bx1qsK.png"></li>
+        <li>== 和 =</li>
+        <li>NULL为0，而null不存在。<code>srand(time(null) - 1919810 + 114514 + 19260817);</code></li>
+        <li>time函数接收的是一个指向time_t类型对象的指针。<code>srand(time(19260817));</code></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>HE-00222</h3>
+      <p>感谢投稿。</p>
+      <img src="https://s3.ax1x.com/2020/11/12/BxNsTf.png">
+      <img src="https://s3.ax1x.com/2020/11/12/BxNf6s.png">
+      <img src="https://s3.ax1x.com/2020/11/12/BxN7kT.png">
+    </div>
+  </div>
+
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

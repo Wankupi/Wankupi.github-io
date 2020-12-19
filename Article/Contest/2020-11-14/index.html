@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>模拟赛总结 2020-11-14</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div id="contain" class="card">
+    <script>
+      function changeState(s) {
+        if (document.getElementById(s).style.display == 'none') document.getElementById(s).style.display = 'block';
+        else document.getElementById(s).style.display = 'none';
+      }
+    </script>
+    <h1>模拟赛总结 2020-11-14 （简要）</h1>
+    <p>今天时间不多了（改题太慢），简要记个思路</p>
+    <h2>T1 演讲(speech)</h2>
+    <p>没看出来找环只有 $n^2$。。</p>
+    <button onclick="changeState('speechCpp')">显示代码</button>
+    <pre><code class='language-cpp code-block' lang='cpp' style="display: none;" id="speechCpp">#include &lt;cstdio&gt;
+typedef long long ll;
+int n = 0;
+ll d = 0;
+struct Data {
+	int to, last;
+};
+Data g[603][603];
+void muti(Data (&amp;r)[603][603], Data const (&amp;A)[603][603]) {
+	static Data tmp[603][603];
+	for (int i = 1; i &lt;= n; ++i) {
+		for (int j = 1; j &lt;= n; ++j) {
+			if (r[i][j].to == 0) { tmp[i][j] = tmp[0][0]; continue; }
+			tmp[i][j] = A[r[i][j].to][r[i][j].last];
+		}
+	}
+	for (int i = 1; i &lt;= n; ++i)
+		for (int j = 1; j &lt;= n; ++j)
+			r[i][j] = tmp[i][j];
+}
+int main() {
+	scanf(&quot;%d %lld&quot;, &amp;n, &amp;d);
+	for (int i = 1; i &lt;= n; ++i)
+		for (int j = 1; j &lt;= n; ++j) {
+			scanf(&quot;%d&quot;, &amp;g[i][j].to);
+			g[i][j].last = i;
+		}
+	Data ans{2, 1};
+	--d;
+	while (d) {
+		if (d &amp; 1) ans = g[ans.to][ans.last];
+		muti(g, g);
+		d &gt;&gt;= 1;
+	}
+	printf(&quot;%d\n&quot;, ans.last);
+	return 0;
+}
+</code></pre>
+    <p>&nbsp;</p>
+    <h2>T2 卡车调度(truck)</h2>
+    <blockquote>
+      <p>无向图，求两点间最小的一个路径方案，方案由一个简单路径和一条有且仅有一个端点在这条简单路径上的边组成，权值为所有边权取max。</p>
+    </blockquote>
+    <p>转化一下，如果我们从小到大加入边，那就是要维护最早什么时候两点间存在这样的方案。若固定一条简单路径，存在特殊边的条件是存在一个中间点度大于等于 $3$ 或 端点度大于等于 $2$。</p>
+    <p>列出两种处理方法：</p>
+    <ul>
+      <li>对每个点求出最早什么时候度为 $2$ 和度为 $3$。不妨记作 $F_2[x]$ 和 $F_3[x]$。 然后在最小生成树上倍增，记录 $fa$ 、树边最大值、$F_3$ 最小值。查询时就是在路径上找到树边最大值（作为简单路径）和 $F_3$ 的最小值（作为特殊边，对端点特判 $F_2$）。然后这两个取较大值就是答案。</li>
+      <li>二分答案。需要维护可撤销并查集，判断就是看连通块内边数是不是大于点数-1。</li>
+
+    </ul>
+    <button onclick="changeState('truckCpp')">显示代码</button>
+    <pre><code class='language-cpp code-block' lang='cpp' style="display:none;" id="truckCpp">#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int const maxn = 1000003, maxm = 1000003, inf = 0x3f3f3f3f;
+int n = 0, m = 0, q = 0;
+
+struct Edge {
+	int u, e, v;
+};
+inline bool operator&lt;(Edge const &amp;lhs, Edge const &amp;rhs) { return lhs.v &lt; rhs.v; }
+Edge line[maxm];
+int head[maxn], nxt[maxn &lt;&lt; 1], to[maxn &lt;&lt; 1], val[maxn &lt;&lt; 1], cnt = 0;
+inline void insert(int u, int e, int v) { nxt[++cnt] = head[u]; head[u] = cnt; to[cnt] = e; val[cnt] = v; }
+int bc[maxn];
+inline int find(int x) { return bc[x] == x ? x : bc[x] = find(bc[x]); }
+int tick[maxn], fir3[maxn], fir2[maxn];
+
+int fa[20][maxn], dep[maxn];
+int mi[20][maxn], mx[20][maxn];
+
+void dfs(int x) {
+	dep[x] = dep[fa[0][x]] + 1;
+	mi[0][x] = fir3[x];
+	for (int  j= 1; j &lt;= 19; ++j) {
+		fa[j][x] = fa[j - 1][fa[j - 1][x]];
+		mi[j][x] = min(mi[j - 1][x], mi[j - 1][fa[j - 1][x]]);
+		mx[j][x] = max(mx[j - 1][x], mx[j - 1][fa[j - 1][x]]);
+	}
+	for (int i = head[x]; i; i = nxt[i])
+		if (to[i] != fa[0][x]) {
+			fa[0][to[i]] = x;
+			mx[0][to[i]] = val[i];
+			dfs(to[i]);
+		}
+}
+
+int queryPath(int x, int y) {
+	if (dep[x] &lt; dep[y]) std::swap(x, y);
+	int onP = -inf, extr = min(fir2[x], fir2[y]);
+	for (int j = 19; ~j; --j) if (dep[fa[j][x]] &gt;= dep[y]) {
+		onP = max(onP, mx[j][x]);
+		extr = min(extr, mi[j][x]);
+		x = fa[j][x];
+	}
+	if (x == y) return max(onP, min(extr, mi[0][x]));
+	for (int j = 19; ~j; --j)
+		if (fa[j][x] != fa[j][y]) {
+			onP = max(onP, max(mx[j][x], mx[j][y]));
+			extr = min(extr, min(mi[j][x], mi[j][y]));
+			x = fa[j][x];
+			y = fa[j][y];
+		}
+	onP = max(onP, max(mx[0][x], mx[0][y]));
+	extr = min(extr, min(mi[1][x], mi[0][x]));
+	return max(onP, extr);
+}
+int main() {
+	scanf(&quot;%d %d %d&quot;, &amp;n, &amp;m, &amp;q);
+	for (int i = 1; i &lt;= m; ++i)
+		scanf(&quot;%d %d %d&quot;, &amp;line[i].u, &amp;line[i].e, &amp;line[i].v);
+	sort(line + 1, line + m + 1);
+	for (int i = 1; i &lt;= n; ++i) bc[i] = i, fir2[i] = fir3[i] = inf;
+	for (int i = 1; i &lt;= m; ++i) {
+		++tick[line[i].u]; ++tick[line[i].e];
+		if (tick[line[i].u] == 2) fir2[line[i].u] = line[i].v;
+		else if (tick[line[i].u] == 3) fir3[line[i].u] = line[i].v;
+		if (tick[line[i].e] == 2) fir2[line[i].e] = line[i].v;
+		else if (tick[line[i].e] == 3) fir3[line[i].e] = line[i].v;
+
+		if (find(line[i].u) == find(line[i].e)) continue;
+		bc[find(line[i].u)] = find(line[i].e);
+		insert(line[i].u, line[i].e, line[i].v);
+		insert(line[i].e, line[i].u, line[i].v);
+	}
+	fa[0][1] = 1;
+	dfs(1);
+	for (int i = 1; i &lt;= q; ++i) {
+		int x = 0, y = 0;
+		scanf(&quot;%d %d&quot;, &amp;x, &amp;y);
+		int ans = queryPath(x, y);
+		printf(&quot;%d\n&quot;, ans == inf ? -1 : ans);
+	}
+	return 0;
+}
+</code></pre>
+    <p>&nbsp;</p>
+    <h2>T3 篝火舞蹈(dance)</h2>
+    <blockquote>
+      <p>简化题意：$3^n$ 个人排成一行。两种操作。第一种：把区间看成三个子区间012，然后交换变成021，再对子区间递归进行。第二种，每个人向右移动一个，最后一个人到最前面。</p>
+      <p>$n \le 12$，操作序列最多 $200000$。</p>
+    </blockquote>
+    <p>两个操作单独都随便搞。。这里套路是维护一个3进制trie。每个叶子表示处于这个位置的是哪个人。第一种就是交换1儿子和2儿子，打下tag；第二种一般的从高位到低位的trie不好搞。但是它每次只会加一，然后会涉及进位什么的。而我们做加法一般都是从低位开始，所以可以从低到高位来建trie。然后模拟加法 0-&gt;1，1-&gt;2, 2-&gt;0，2就是进位变成0，所以还要继续递归。</p>
+    <button onclick="changeState('danceCpp')">显示代码</button>
+    <pre><code class='language-cpp code-block' lang='cpp' style="display: none;" id="danceCpp">#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int const maxn = 531441;
+int n = 0, rt = 0;
+int base[20];
+char s[200003];
+int tr[1000003][3], cnt = 0;
+int who[1000003];
+bool tag[1000003];
+void Create(int &amp;p, int j, int x) {
+	p = ++cnt;
+	if (j == n) {
+		who[p] = x;
+		return;
+	}
+	Create(tr[p][0], j + 1, x);
+	Create(tr[p][1], j + 1, x + base[j]);
+	Create(tr[p][2], j + 1, x + 2 * base[j]);
+}
+inline void Tag(int p) {
+	tag[p] = !tag[p];
+}
+inline void pushdown(int p) {
+	if (!tag[p]) return;
+	tag[p] = false;
+	std::swap(tr[p][1], tr[p][2]);
+	Tag(tr[p][0]);
+	Tag(tr[p][1]);
+	Tag(tr[p][2]);
+}
+inline void add(int p, int j) {
+	if (j == n) return;
+	pushdown(p);
+	int k = tr[p][2];
+	tr[p][2] = tr[p][1];
+	tr[p][1] = tr[p][0];
+	tr[p][0] = k;
+	add(tr[p][0], j + 1);
+}
+int ans[maxn];
+void GetAll(int p, int j, int x) {
+	if (j == n) {
+		ans[who[p]] = x;
+		return;
+	}
+	pushdown(p);
+	GetAll(tr[p][0], j + 1, x);
+	GetAll(tr[p][1], j + 1, x + base[j]);
+	GetAll(tr[p][2], j + 1, x + 2 * base[j]);
+}
+int main() {
+	scanf(&quot;%d&quot;, &amp;n);
+	scanf(&quot;%s&quot;, s + 1);
+	base[0] = 1;
+	for (int i = 1; i &lt;= n; ++i) base[i] = base[i - 1] * 3;
+	Create(rt, 0, 0);
+	for (int i = 1; s[i]; ++i) {
+		if (s[i] == &#39;S&#39;) Tag(rt);
+		else add(rt, 0);
+	}
+	GetAll(rt, 0, 0);
+	for (int i = 0; i &lt; base[n]; ++i)
+		printf(&quot;%d &quot;, ans[i]);
+	return 0;
+}
+</code></pre>
+    <p>&nbsp;</p>
+    <h2>T4 练习曲(etude)</h2>
+    <blockquote>
+      <p>给定一个序列，要求用最小代价覆盖它。覆盖的方式是选择长度不大于 $L$ 的一段，代价是：如果区间最大值 $mx$ 仅有一个且出现在末尾，代价位 $mx$，否则代价为 $mx+1$。</p>
+      <p>多次询问将一个点修改后的最小代价。询问间互不影响。</p>
+      <p>$n\le 6\times10^5$，$L \le 600$，$q \le 2\times10^4$。</p>
+    </blockquote>
+    <p>会发现修改 $p$ 位置后会影响 $(p-L,p+L)$ 这个区间怎么覆盖，更前和更后面的覆盖是不会改变的。于是可以考虑记一个前缀和后缀 dp 值。然后算出中间的加上两边的去更新答案。中间的段的数量是 $L^2$ 的，如果我们去枚举这些段，那 $qL^2$ 是无法接受的。然后会发现 $f$ 和 $g$ 都是单调的，即如果我们固定中间段的左端点了，那在不增加代价的情况下右端点越靠右越好。所以用双指针优化一下。</p>
+    <p>在求 $f$ 和 $g$ 的时候复杂度是 $nL$ 的，勉强能接受。题解中给出了 $n\log L$ 的求法，相当于是用线段树维护了单调栈（下降），然后查询区间最小值。<del>如果你愿意在线段树上维护循环栈，那么可以是 $\log L$，否则是 $\log n$</del></p>
+    <button onclick="changeState('etudeCpp')">显示代码</button>
+    <pre><code class='language-cpp code-block' lang='cpp' style="display: none;" id="etudeCpp">#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int const maxn = 600003;
+typedef long long ll;
+int read() {
+	int x = 0, c = getchar();
+	while (c &lt; &#39;0&#39; || c &gt; &#39;9&#39;)
+		c = getchar();
+	while (c &gt;= &#39;0&#39; &amp;&amp; c &lt;= &#39;9&#39;) {
+		x = x * 10 + c - &#39;0&#39;;
+		c = getchar();
+	}
+	return x;
+}
+int n = 0, L = 0, Q = 0;
+int a[maxn];
+ll f[maxn], g[maxn];
+
+int main() {
+	n = read(); L = read(); Q = read();
+	for (int i = 1; i &lt;= n; ++i)
+		a[i] = read();
+	for (int i = 1; i &lt;= n; ++i) {
+		f[i] = f[i - 1] + a[i];
+		int mx = a[i]; bool up = false;
+		for (int j = i - 1; j &gt;= 1 &amp;&amp; i - j + 1 &lt;= L; --j) {
+			if (a[j] &gt;= mx) { mx = a[j]; up = true; }
+			f[i] = std::min(f[i], f[j - 1] + mx + up);
+		}
+	}
+	for (int i = n; i &gt;= 1; --i) {
+		g[i] = g[i + 1] + a[i];
+		int mx = a[i]; bool up = false;
+		for (int j = i + 1; j &lt;= n &amp;&amp; j - i + 1 &lt;= L; ++j) {
+			if (a[j] &gt; mx) { mx = a[j]; up = false; }
+			else up = true;
+			g[i] = std::min(g[i], g[j + 1] + mx + up);
+		}
+	}
+	int p = 0, v = 0;
+	for (int t = 1; t &lt;= Q; ++t) {
+		p = read(); v = read();
+		int cur = p + 1, mx = v;
+		ll ans = f[p - 1] + g[p + 1] + v;
+		for (int l = p - 1; l &gt;= 0 &amp;&amp; p - l &lt;= L; --l) {
+			while (cur &lt; n + 1 &amp;&amp; cur - l &lt;= L &amp;&amp; a[cur] &lt;= mx) ++cur;
+			cur = std::min(cur, l + L + 1);
+			ans = std::min(ans, f[l] + g[cur] + mx + 1);
+			if (a[l] &gt; mx) mx = a[l];
+		}
+		cur = p - 1; mx = v;
+		bool last = true;
+		for (int r = p + 1; r &lt;= n + 1 &amp;&amp; r - p  &lt;= L; ++r) {
+			while (cur &gt; 0 &amp;&amp; r - cur &lt;= L &amp;&amp; a[cur] &lt; mx) --cur;
+			cur = max(cur, r - L - 1);
+			ans = std::min(ans, f[cur] + g[r] + mx + (!last));
+			if (a[r] &gt; mx) { mx = a[r]; last = true; }
+			else last = false;
+		}
+		printf(&quot;%lld\n&quot;, ans);
+	}
+	return 0;
+}
+</code></pre></div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

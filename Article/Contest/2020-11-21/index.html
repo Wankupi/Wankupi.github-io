@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>模拟赛总结 2020-11-21</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div id="contain" class="card">
+    <h1>模拟赛总结 2020-11-21</h1>
+
+    <h2>T1 宝藏(treasure)</h2>
+    <blockquote>
+      <p>有 $n$ 个物品，第 $i$ 个有价值 $w_i$ 和花费 $t_i$。选一些物品，花费总和不能超过 $T$。多次询问正好选 $x_i$ 个时，中位数最大是多少，保证 $x_i$ 是奇数。</p>
+    </blockquote>
+    <p>关键是看出当选的数量增加时，中位数是不增的。将物品按价值排序，从大到小判断这个数能不能是中位数：从右边和左边各取 $\frac{x}{2}$ 各价值最小的，用线段树/树状数组维护一下。</p>
+    <p>听说数组数组倍增是一个 $\log$ 的...</p>
+
+    <h2>T2 寻找道路(path)</h2>
+    <blockquote>
+      <p>给⼀个 $n$ 点条有向边的图，每条边上有数字 $0$ 或 $1$，定义⼀个路径的⻓度为这个路径上依次经过的边上的数字拼在⼀起后在⼆进制下的值（前导 $0$ 对该路径⻓度没有贡献）。现在需要你求出从 $1$ 号点出发，到 $2\dots n$ 号点的路径的⻓度的最⼩值。</p>
+    </blockquote>
+    <p>逐层更新，然后每一层求出一个 $rank$ 来，下一层就能通过 $rank$ 来比较大小。</p>
+
+    <h2>T3 猪国杀(legend)</h2>
+    <blockquote>
+      <p>长为 $n$ 的序列，定义变量 $X$ 为最多选多少数，使它们的和不大于 $m$。现在每个数都等概率的落在 $1\dots A$ 之间，求 $E(X) \bmod 998244353$。</p>
+    </blockquote>
+    <p>建议先看 Solution 2。</p>
+    <p><strong>Solution 1</strong></p>
+    <p>设 $g[i,j,k]$ 表示选 $i$ 个元素， 每个元素的值都不大于 $j$，和不大于 $k$ 的方案数。</p>
+    <p>考虑枚举一个值 $j$ 和一个数量 $i$，强制要求我们选的数最大的是 $j$。 把序列分成三个部分：$i$ 个强制要求严格小于 $j$ 的，$t$ 个等于 $j$ 的，$n-i-t$ 个大于 $j$ 的。其中 $j$ 要选 $k$ 个（所以要求 $1 \le k \le t$）。</p>
+    <p>这样我们得出第一部分的和应小于等于 $m-k \cdot j$。这三个部分是可重集排列的关系，配上组合数。假如随便写了个式子</p>
+    <div>$$ \mathrm{Ans}\cdot A^{n}=\sum_{i=0}^{n}\sum_{j=1}^{A}\sum_{k=1}^{n-i}g[i][j-1][m-k \cdot j]\sum_{t=k}^{n-i}(A-j)^{n-i-t}\binom{n}{i}\binom{n-i}{t}(i+k) $$</div>
+    <p>第一眼觉得它是不对的。</p>
+    <p>$g$ 这里只要求前面的和是不大于 $m-k\cdot j$ 的，规定了上限却没有规定下限，那可能加上 $k$ 个 $j$ 之后还是能放进去 $j$ 和比 $j$ 大的数，那 $(i+k)$ 这个答案是不正确的。</p>
+    <p>反过来，如果从贡献角度考虑，一个序列这么算，会算多少遍呢？发现就是答案遍。前 $i$ 个严格小于 $j$ 的元素，和是定的，会对 $g[i][j-1][s\dots m]$ 各贡献1；后 $n-i-t$ 个严格大于 $j$ 的元素，在幂中也只会贡献一次；而元素 $j$，它的贡献次数体现在 $g$ 的第三维下标上。（这里建议自己思考一下）</p>
+    <p>所以去掉乘答案这一项...直接重复地统计方案数就是答案。</p>
+    <div>$$ \mathrm{Ans}\cdot A^{n}=\sum_{i=0}^{n}\sum_{j=1}^{A}\sum_{k=1}^{n-i}g[i][j-1][m-k \cdot j]\binom{n}{i}\sum_{t=k}^{n-i}(A-j)^{n-i-t}\binom{n-i}{t} $$</div>
+    <p>先分析下复杂度...设单点求 $g$ 复杂度是 $O(A)$，整体复杂度是 $O(nm\log m (A+n))$。</p>
+    <p>可以用背包或者二项式反演求 $g$。详细说下二项式反演，</p>
+    <div>$$ g[i][j][k]=\sum_{t=0}^{i}(-1)^{-t}\binom{i}{t}\binom{k-tj}{i} $$</div>
+    <p>枚举 $t$ 个是大于 $j$ 的。指数上 $-t$ 和 $t$ 是等价的。第二个组合数用的是隔板法。</p>
+    <p><strong>Solution 2</strong></p>
+    <p>from jzp。</p>
+    <p>同样还是将最多能选多少个跟统计方案数一起搞。可以这样理解一下，选的那些数排序后，从小到大看，如果前缀和小于等于 $m$，就加一，这样得到的就是答案。首先考虑枚举当前选的数里有一个值为 $j$ 。然后枚举 $i$ 为 $j$ 最后一次出现的位置（已选）。这样序列就被分成了两部分。现在要加上两部分中都不大于 $j$ 的数求和不大于 $m$ 的方案数。只在确定的一个 $j$ 处统计才不会重复，也可以选第一个 $j$ 。然后枚举前一部分的和为 $v$，把两部分方案数卷起来。</p>
+    <div>$$ \mathrm{Ans}\cdot A^{n}=\sum_{j=1}^{A}\sum_{i=1}^{n}\sum_{v=0}^{m}s[j][i-1][v] \times f[j-1][n-i][m-v-j] $$</div>
+    <p>$f[j][i][k]$ 表示 $i$ 个数，选了所有不大于 $j$ 的数，大于的都没选，和为 $k$ （这里严格等于）的方案数。$s[j][i][k]=\sum_{t=0}^{k}f[j][i][t]$。</p>
+    <p>于是还有一个问题，如果某序列的解中包含了若干 $j$，它会统计这么多次吗？答：会在多个 $i$ 处被统计。</p>
+    <p>复杂度 $O(nmA)$。</p>
+
+    <h2>T4 数树(count)</h2>
+    <p>&nbsp;</p>
+
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

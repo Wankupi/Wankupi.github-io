@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>集合变换总结</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div id="contain" class="card">
+    <h1>关于集合变换的总结</h1>
+    <p>本文多是自己的思考，代码涉及较少。以下是我觉得比较恰当的学习顺序，其实这三个交叉很多（包含（雾。</p>
+    <p>个人认为集合幂级数是个好东西！</p>
+    <ul>
+      <li>高维前缀和</li>
+      <li>FMT 快速莫比乌斯变换</li>
+      <li>FWT 快速沃尔什变换</li>
+      <li>FST 快速子集变换</li>
+    </ul>
+    <p>一定要读：</p>
+    <ul>
+      <li>Miracle<a href='https://www.cnblogs.com/Miracevin/p/9778266.html' target='_blank'>【学习笔记】高维前缀和</a>。学长讲得很详细。</li>
+      <li>command_block大佬的<a href='https://www.luogu.com.cn/blog/command-block/wei-yun-suan-juan-ji-yu-ji-kuo-zhan' target='blank'>位运算卷积(FWT) &amp; 集合幂级数</a>。我找到的唯一一篇用矩阵描述的。深入浅出，句句干货<del>跳一句就看不懂了</del>。</li>
+    </ul>
+    <h3>高维前缀和</h3>
+    <p>写出式子来是</p>
+    <div>$$ \hat{f}_S=\sum_{T \subset S}f_T $$
+    </div>
+    <p>如果我们将反着加，同样地能求出，（算是后缀和？？）</p>
+    <div>$$ \hat{f}_S=\sum_{S \subset T}f_T $$
+    </div>
+    <p>能差分回来的才是好前缀和。子集反演一下，</p>
+    <div>$$ f_S=\sum_{T \subset S}(-1)^{\vert S \vert - \vert T \vert}\hat{f}_T $$
+    </div>
+    <h3>快速莫比乌斯变换 FMT</h3>
+    <p>代码跟高维前缀和没什么区别。主要是思想的扩展。用以解决集合并卷积</p>
+    <div>$$ h_S=\sum_{A \cup B=S}f_A g_B $$
+    </div>
+    <p>和集合交卷积</p>
+    <div>$$ h_S=\sum_{A \cap B =S}f_A g_B $$
+    </div>
+    <p>做法是先对 $f$ 和 $g$ 做变换得到 $\hat{f}$ 和 $\hat{g}$，直接相乘得到 $\hat{h}$，再逆变换回来。证明以集合并卷积为例，</p>
+    <div>$$ \begin{aligned} \hat{h}_S&amp;=\sum_{T \subset S}h_T \\ &amp;=\sum_{T \subset S}\sum_{A \cup B =T}f_A g_B \\ &amp;=\sum_{A \subset S}\sum_{B\subset S}f_A g_B \\ &amp;=\hat{f}_S \hat{g}_S \end{aligned} $$
+    </div>
+    <p>&nbsp;</p>
+    <h3>快速莫比乌斯变换 FWT</h3>
+    <p>这个可以替代上面两种，常数更小。</p>
+    <p>FWT 还能用来计算集合对称差卷积和子集卷积。对称差卷积二进制表示下就是异或。</p>
+    <div>$$ h_S=\sum_{A \oplus B = S}f_A g_B $$
+    </div>
+    <p>援引2015年吕凯风的论文《集合幂级数的性质与应用及其快速算法》中的推导：</p>
+    <p>有引理</p>
+    <div>$$ [S=\varnothing]=\frac{1}{\vert U \vert}\sum_{T\subset U}(-1)^{\vert S \cap T \vert} $$
+    </div>
+    <p> $S=A \oplus B$ 等价于 $A \oplus B \oplus S = \varnothing$。</p>
+    <p>&nbsp;</p>
+    <div>$$ \begin{aligned} h_S&amp;=\sum_{A\subset U}\sum_{B\subset U}[A \oplus B \oplus S = \varnothing]f_A g_B \\ &amp;=\frac{1}{\vert U \vert}\sum_{A\subset U}\sum_{B\subset U}\sum_{T\subset U}(-1)^{\vert (A \oplus B \oplus S) \cap T \vert}f_A g_B \\ &amp;=\frac{1}{\vert
+      U \vert}\sum_{A\subset U}\sum_{B\subset U}\sum_{T\subset U}(-1)^{\vert A \cap T \vert}(-1)^{\vert B \cap T \vert}(-1)^{\vert S\cap T\vert}f_A g_B \\ &amp;=\frac{1}{\vert U \vert}\sum_{T\subset U}(-1)^{\vert S\cap T\vert}\sum_{A\subset U}(-1)^{\vert
+      A \cap T \vert}f_A\sum_{B\subset U}(-1)^{\vert B \cap T \vert} g_B \end{aligned} $$
+    </div>
+    <p>于是定义</p>
+    <div>$$ \hat{f}_S=\sum_{A \subset U}(-1)^{\vert A\cap S \vert}f_A $$
+    </div>
+    <p>于是</p>
+    <div>$$ h_S=\frac{1}{\vert U \vert}\sum_{T\subset U}(-1)^{\vert S\cap T\vert}\hat{f}_T \hat{g}_T $$
+    </div>
+    <p>若令 $g=x^\varnothing$ （二进制下即仅有 $g_0=1$，其他均为 $0$），$f=f \oplus g$。所以</p>
+    <div>$$ f_S=\frac{1}{\vert U \vert}\sum_{T\subset U}(-1)^{\vert S\cap T\vert}\hat{f}_T $$
+    </div>
+    <p>对照系数便得出</p>
+    <div>$$ \hat{h}_S=\hat{f}_S\hat{g}_S $$
+    </div>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <h3>快速子集变换 FST</h3>
+    <p>就是求子集卷积用的。</p>
+    <div>$$ h_S=\sum_{A}\sum_B[A \cup B=S \wedge A \cap B=\varnothing]f_A g_B $$
+    </div>
+    <p>只是比集合或卷积多了一个条件，转化一下。在满足 $A \cup B=S$的情况下，只要有 $\vert A \vert+\vert B \vert=\vert S \vert$，就有 $A\cap B=\varnothing$。 所以外层按大小做一下暴力卷积。
+    </p>
+    <p>&nbsp;</p>
+    <h3>其他的</h3>
+    <ul>
+      <li>用 FWT 优化 dp 时，可能只是要求出一个点的原值。这种情况下就不要IDWT了，直接考虑每一位的贡献，可以优化一个 $\log N$。</li>
+      <li>当推出子集卷积的形式时，可以思考一下是否真的要做子集。有时可以用一个更弱的条件集合或卷积代替，而不影响答案。</li>
+    </ul>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

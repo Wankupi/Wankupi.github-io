@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>模拟赛总结 2020-10-26</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div id="contain" class="card">
+    <h1>模拟赛总结 2020-10-26</h1>
+    <p>吐槽：emmm 今天考的就是<a href='https://ac.nowcoder.com/acm/contest/7605'>牛客比赛</a>原题。。虽然没做过。。</p>
+    <p>&nbsp;</p>
+    <h3>T1 牛牛的方程式</h3>
+    <blockquote>
+      <p>链接：<a href='https://ac.nowcoder.com/acm/contest/7605/A'> 牛牛的方程式</a>。</p>
+      <p>$ax+by+cz=d$ 中有没有至少存在一组 $\{x,y,z\}$ 的解，且 $x$ , $y$ , $z$ 都为整数，使得方程式成立。</p>
+    </blockquote>
+    <p>直接判断 $\gcd(a,b,c)$ 是否整除 $d$ 即可，特判 $0$。</p>
+    <p>以下给出一个完全不需要裴蜀定理和归纳法的证明：（但是似乎前置知识比较多...）</p>
+    <p>我们知道 $(Z,+)$ 是一个加法循环群 $
+      <1>$。设集合 $A$ 为所有能被 $\{a\}$ 线性组合表出的数的集合。</p>
+    <div>$$ A=\{\sum_{i=1}^{n}m_i a_i \mid m\in \mathbb{Z}\} $$
+    </div>
+    <p>显然有 $\forall i$，$a_i \in A$ 且 $-a_i \in A$，$0 \in A$。所以 $(A,+)$ 是循环群 $(Z,+)$ 的子群。由循环群性质，$(A,+)$ 也是一个循环群，可以被表示为 $(A,+)=&lt;d&gt;$。于是对于任意元素 $x \in A$ ，都满足 $d \mid x$。任取 $\{a\}$ 的一个公因子 $d'$，都满足 $d=\sum m_i (k_i d')$，所以 $d' \mid d$。</p>
+    <p>即 $d$ 是 $\{a\}$ 的最大公因子。</p>
+    <p>&nbsp;</p>
+    <h3>T2 猜数游戏</h3>
+    <blockquote>
+      <p>链接： <a href='https://ac.nowcoder.com/acm/contest/7605/B'> 牛牛的猜球游戏</a>。</p>
+      <p>有 0~9 这 10 个数字，每个操作交换两个位置上的数字。最开始顺序是是 0,1,2,...,9。</p>
+      <p>有 $n$ 个操作，多次询问如果顺序执行 $[l,r]$ 中的操作最后每个位置数字是什么。</p>
+    </blockquote>
+    <p>每次操作就是一个对换，合起来就是置换。置换是可逆的，所以差分一下就行。注意数组的意义。</p>
+    <p>&nbsp;</p>
+    <h3>T3 凑数游戏</h3>
+    <blockquote>
+      <p>链接：<a href='https://ac.nowcoder.com/acm/contest/7605/C'>牛牛的凑数游戏</a>。</p>
+      <p>区间中的数字组成一个集合，问最小的一个不能通过子集和来表示的数字。空集的和为 $0$。</p>
+    </blockquote>
+    <p>一个暴力的思路就是先把区间中的数字升序排序，从小向大扫，设当前不能表示的最小数字为 $U$，下一个数字为 $x$，若 $x \le U$，则可以把 $U$ 增大 $x$，去看下一个数字；否则答案就是 $U$。证明也很好证。</p>
+    <p>更进一步的可以发现，其实是所有小于等于 $U$ 的数的和 $+1$ 成为了新的 $U$。直到不能再增长为止。这个过程是比较迅速的，在最坏情况下，$U$ 的迭代为 $f[i]=f[i-1]+f[i-2]+1$。平均情况下次数应该是与 $\log n$ 同阶，略小于 $\log_2 n$ 的，没去证明。</p>
+    <p>于是我们需要一个能查询区间中比 $x$ 小的数的和的数据结构。主席树、01trie等都可以。</p>
+    <p>还有 AlanSP 巨佬的离线做法：</p>
+    <p>把所有数按值排序（记录下标），开一个下标树状数组，先把询问放到最后一个 $1$ 上，按顺序加入树状数组，每次碰到询问就查一下区间和，如果和更大了，就挂到更大的那个值上。复杂度也是 $O(n\log^2 n)$。</p>
+    <p>&nbsp;</p>
+    <h3>T4</h3>
+    <blockquote>
+      <p>链接：<a href='https://ac.nowcoder.com/acm/contest/7605/D'> 牛牛的RPG游戏</a>。</p>
+      <p>题面太长不概括了...</p>
+    </blockquote>
+    <p>设 $f(i,j)$ 表示强制触发 $ (i,j)$，到 $(n,m)$ 的最大收益。</p>
+    <div>$$ f(i,j)=\max_{p\ge i,q\ge j}\{f(p,q)+(p+q) \cdot buff(i,j)\} +val(i,j)-(i+j) \cdot buff(i,j) $$
+    </div>
+    <p>把 $f(p,q) + (p+q)X$ 看作一个直线，就是要找当 $X=buff(i,j)$ 时的最大点值。</p>
+    <p><del>动态凸包</del>。还要注意到有 $p \ge i$，$q \ge j$ 的限制。枚举顺序是逆序，已满足 $p \ge i$。观察到一条直线 $(p,q)$ 的横向作用范围是$[1,q]$，一个前缀。用树状数组套李超线段树维护即可，</p>
+    <p>注意初始化。</p>
+
+    <h4>代码链接</h4>
+    <ul>
+      <li><a target="_blank" href="./方程式.cpp">方程式</a></li>
+      <li><a target="_blank" href="./猜球游戏.cpp">猜数游戏</a></li>
+      <li><a target="_blank" href="./凑数游戏.cpp">凑数游戏</a></li>
+      <li><a target="_blank" href="./RPG游戏.cpp">RPG游戏</a></li>
+    </ul>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

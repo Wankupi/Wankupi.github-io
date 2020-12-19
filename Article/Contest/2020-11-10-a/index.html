@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>模拟赛总结 2020-11-10</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div id="contain">
+    <div class="card">
+      <h1>小测 2020-11-10-a</h1>
+      <a href="problems.pdf" target="_blank">题面链接</a>
+      <h3>斐波那契(f)</h3>
+      <blockquote>给一个数组，把它划分成最小的不重叠连续区间，使每一段内两两的和不是斐波那契数。</blockquote>
+      <p>一个数集中数越少越不容易发生冲突。从左向右考虑，尽量给右边留下更少的数。所以维护一下当前的集合，如果下一个加入后不冲突，就加入；否则情况当前集合，++答案。</p>
+
+      <h3>序列(x)</h3>
+      <blockquote>给一个长为$n(n \le 100000)$的数列，求有多少个区间满足：中位数在范围$[l_1,r_1]$之间，长度在$[l_2,r_2]$之间。询问$m(m \le 5)$次
+      </blockquote>
+      <p>
+        $m$这么小，，可以考虑一些复杂度比较大的做法。首先这个范围是可以差分的。考虑如何求出所有长度满足条件，中位数严格小于$V$的区间。根据<a href="https://www.luogu.com.cn/problem/P2839">middle</a>这题的经验，把大于等于$V$的设为$+1$，小于的设为$-1$。然后查询区间和，如果大于 $0$，中位数就大于等于$V$，反之小于$V$。 所以只需求出哪些区间的区间和是小于等于$0$的。 即 $s_r-s_{l-1} \le 0$，$s_r\le
+        s_{l-1}$。按顺序扫右端点$i$，用权值树状数组维护一下$[i-R,i-L]$内的所有$s$，注意要加偏移量。
+      </p>
+
+      <h3>栅栏(z)</h3>
+      <blockquote>在二维平面（$n\times m$的网格图，$n,m \le 2000$）上，在一些矩形边缘设置栅栏，内外变成不连通的状态。也会删掉一个已存在的栅栏，内外重新联通。还会询问这个时刻两点是否联通。保证任一时刻栅栏不相交。</blockquote>
+      <p>乱搞...考虑在一个矩形边上设置栅栏相当于矩形内加一个随机值，删掉栅栏就是减这个值。那么如果联通，这两个点的权值一定是一样的。如果不连通，有一种情况是[A[B]A]，B恰好挡在中间，但这样的数据是不合法的，因为栅栏不相交。看rp/kk。</p>
+      <p>并不会它想考的东西...</p>
+      <br />
+      <ul>
+        <li><a href="f.cpp">f.cpp</a></li>
+        <li><a href="x.cpp">x.cpp</a></li>
+        <li><a href="z.cpp">z.cpp</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

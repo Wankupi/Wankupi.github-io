@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>错误总结</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <h1>错误总结</h1>
+  <div id="contain" class="card">
+    <ol>
+      <li>
+        <p>字符串题，ASCII在33到126之间，
+          <code>int const MAXCHAR = 126, MINCHAR = 33, M = MAXCHAR - MINCHAR;</code>
+          <code>M</code>应加一。</p>
+      </li>
+      <li>
+        <p>遍历元素并记录一些值的时候，</p>
+        <pre><code class='language-cpp code-block' lang='cpp'>for (auto &amp;q : qs[x]) {
+	q.v1 = querySubtree(TrAr1, q.p1);
+	if (q.p2 != -1) q.v2 = querySubtree(TrAr2, q.p2);
+}
+</code></pre>
+        <p>没有加引用</p>
+        <pre><code class='language-cpp code-block' lang='cpp'>for (auto p : qs[x])
+</code></pre>
+      </li>
+      <li>
+        <p>临界表存无向图边数不开二倍。</p>
+      </li>
+      <li>
+        <p>无向图缩点后</p>
+        <pre><code class='language-cpp code-block' lang='cpp'>for (int x = 1; x &lt;= n; ++x)
+for (i)
+    insert(x, to);
+    insert(to, x);
+</code></pre>
+        <p>导致事实上每条边加了两倍。然后遍历会被卡成指数级。</p>
+      </li>
+      <li>
+        <p>$n$ 个点 $m$ 条边：</p>
+        <pre><code class='language-cpp code-block' lang='cpp'>for (int i = 1; i &lt;= n; ++i) {
+	scanf(&quot;%d %d&quot;, &amp;x, &amp;y);
+	insert(x, y); insert(y, x);
+}
+</code></pre>
+      </li>
+      <li>
+        <code>set</code> 无论是排序还是搜索，默认都使用小于运算符比较。
+      </li>
+    </ol>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

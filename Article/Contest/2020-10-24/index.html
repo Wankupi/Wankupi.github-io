@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>模拟赛总结 2020-10-24</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div id="contain" class="card">
+    <h3 id="Title">模拟赛总结 2020-10-24</h3>
+    <p>&nbsp;</p>
+    <a href="problem.pdf" target="_blank">pdf题面链接</a>
+
+    <h4>T1 询问(equal)</h4>
+    <p>看了一眼，这不是 sb 题嘛！直接判字母出现次数是否能对应上。</p>
+    <p>然后就变成 sb 了。<del>竟然有20分</del>。</p>
+    <p>正解对位置哈希。原题 <a href='https://www.luogu.com.cn/problem/CF985F'>CF985F Isomorphic Strings</a>。</p>
+    <p>&nbsp;</p>
+    <h4>T2 异或(xor)</h4>
+    <p>01trie 裸题。</p>
+    <p>然而写挂了5分。</p>
+    <p>原因：对于等于 $k$ 时的处理，应该是如果该点存在，加上这个点的size，而我只加了1。</p>
+    <p>AzusaCat : 你才挂5分？！</p>
+    <p>数据太水。</p>
+    <p>&nbsp;</p>
+    <h4>T3 矩形(frame)</h4>
+    <p>原题 <a href='https://www.luogu.com.cn/problem/P1502'>LuoguP1520 窗口的星星</a>。</p>
+    <p>&nbsp;</p>
+    <h4>T4 虚伪的最小公倍数(lcm)</h4>
+    <p>题面：</p>
+    <div>$$ \prod_{i_1=1}^{n}\prod_{i_2=1}^{n}\cdots\prod_{i_k=1}^{n} \frac{i_1 \cdot i_2 \cdots i_k}{\gcd(i_1,i_2,\dots,i_k)} $$
+    </div>
+    <p><strong>Solution</strong></p>
+    <p>因为整个式子里只有乘法，可以分别考虑分式上下。</p>
+    <div>$$ \begin{aligned} \mathrm{UP} &amp;=\prod_{i_1=1}^{n}\prod_{i_2=1}^{n}\cdots\prod_{i_k=1}^{n} {i_1 \cdot i_2 \cdots i_k}\\ &amp;=\prod_{i_1=1}^{n}\prod_{i_2=1}^{n}\cdots\prod_{i_{k-1}}^{n} {i_1 \cdot i_2 \cdots i_{k-1}}\prod_{i_k=1}^{n}i_k \\ &amp;=(\prod_{i_1=1}^{n}\prod_{i_2=1}^{n}\cdots\prod_{i_{k-1}}^{n}
+      {i_1 \cdot i_2 \cdots i_{k-1}})^{n}(n!)^{n^{k-1}}\\ &amp;=(n!)^{k \cdot n^{k-1}} \end{aligned} $$
+    </div>
+    <div>$$ \mathrm{DOWN} =\prod_{i_1=1}^{n}\prod_{i_2=1}^{n}\cdots\prod_{i_k=1}^{n} \gcd(i_1,i_2,\dots,i_k) $$
+    </div>
+    <p>可以考虑计数在多少种情况下 $\gcd$ 等于 $d$。</p>
+    <div>$$ f(d)=\sum_{i_1=1}^{n}\sum_{i_2=1}^{n}\cdots\sum_{i_k=1}^{n} [d=\gcd(i_1,i_2,\dots,i_k)] $$
+    </div>
+    <p>使用莫反求解这个式子，设</p>
+    <div>$$ F(d)=\sum_{i_1=1}^{n}\sum_{i_2=1}^{n}\cdots\sum_{i_k=1}^{n} [d \mid \gcd(i_1,i_2,\dots,i_k)] = {\lfloor\frac{n}{d}\rfloor}^{k} $$
+    </div>
+    <p>得</p>
+    <div>$$ f(x)=\sum_{x \mid d}\mu(\frac{d}{x}){\lfloor\frac{n}{d}\rfloor}^{k} $$
+    </div>
+    <p>所以</p>
+    <div>$$ \mathrm{DOWN}=\prod_{x=1}^{n}x^{f(x)}=\prod_{x=1}^{n}x^{\sum_{x \mid d}\mu(\frac{d}{x}){\lfloor\frac{n}{d}\rfloor}^{k}} =\prod_{d=1}^{n}(\prod_{x \mid d}x^{\mu(\frac{d}{x})})^{{\lfloor\frac{n}{d}\rfloor}^{k}} $$
+    </div>
+    <p>即可根号求解。</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>以下是考场上我 T4 推的完全不知道怎么快速求的、只拿了20分的式子。方向一开始就选错了（菜。</p>
+    <p>根据最大公因子分类，设 </p>
+    <div>$$ f(d)=\prod_{i_1=1}^{n}\prod_{i_2=1}^{n}\cdots\prod_{i_k=1}^{n} i_1 \cdot i_2 \cdots i_k[d=\gcd(i_1,i_2,\dots,i_k)] $$ $$ c(d)=\sum_{i_1=1}^{n}\sum_{i_2=1}^{n}\cdots\sum_{i_k=1}^{n}[\gcd(i_1,i_2,\cdots,i_k)=1] $$
+    </div>
+    <p>答案为</p>
+    <div>$$ \prod_{d=1}^{n}f(d)d^{-c(d)} $$
+    </div>
+    <p>设</p>
+    <div>$$ \begin{aligned} F(d) &amp;=\prod_{i_1=1}^{n}\prod_{i_2=1}^{n}\cdots\prod_{i_k=1}^{n} i_1 \cdot i_2 \cdots i_k[d \mid \gcd(i_1,i_2,\dots,i_k)]\\ &amp;=\prod_{d\mid i_1}\prod_{d\mid i_2}\cdots\prod_{d\mid i_k}i_1 \cdot i_2 \cdots\cdot i_k\\ &amp;=(d^{\lfloor\frac{n}{d}\rfloor}{\lfloor\frac{n}{d}\rfloor}!)^{k{\lfloor\frac{n}{d}\rfloor}^{k-1}}
+      \end{aligned} $$
+    </div>
+    <p>有 $F(x)=\prod_{x \mid d}f(d)$ 。反演得</p>
+    <div>$$ \begin{aligned} f(x) &amp;=\prod_{x \mid d}F(d)^{\mu(\frac{d}{x})} \\ &amp;=\prod_{x \mid d}(d^{\lfloor\frac{n}{d}\rfloor}{\lfloor\frac{n}{d}\rfloor}!)^{\mu(\frac{d}{x})k{\lfloor\frac{n}{d}\rfloor}^{k-1}} \end{aligned} $$
+    </div>
+    <p>类似有</p>
+    <div>$$ c(x)=\sum_{x \mid d} \mu(\frac{d}{x}){\lfloor\frac{n}{d}\rfloor}^{k} $$
+    </div>
+    <p>所以</p>
+    <div>$$ \begin{aligned} \mathrm{Ans} &amp;=\prod_{x=1}^{n} (\sum_{x \mid d}\mu(\frac{d}{x}){\lfloor\frac{n}{d}\rfloor}^{k}) \prod_{x \mid d}(d^{\lfloor\frac{n}{d}\rfloor}{\lfloor\frac{n}{d}\rfloor}!)^{\mu(\frac{d}{x})k{\lfloor\frac{n}{d}\rfloor}^{k-1}}
+      \end{aligned} $$
+    </div>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

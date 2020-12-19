@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>Codeforces Round #679 总结</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div id="contain" class="card">
+    <h1>Codeforces Round #679</h1>
+    <p>链接 Codeforces Round #679：</p>
+    <ul>
+      <li><a href='https://codeforces.com/contest/1413'>Technocup 2021 - Elimination Round 1</a></li>
+      <li><a href='https://codeforces.com/contest/1413'>div1</a> </li>
+      <li><a href='https://codeforces.com/contest/1435'>div2</a></li>
+
+    </ul>
+    <h3><a href='https://codeforces.com/contest/1435/problem/A'>A. Finding Sasuke</a></h3>
+    <p>特殊性质 $n$ is even，取相邻两个 $a_i,a_{i+1}$，令 $b_i=a_{i+1}$，$b_{i+1}=-a_i$。</p>
+    <p>&nbsp;</p>
+    <h3><a href='https://codeforces.com/contest/1435/problem/B'>B. A New Technique</a></h3>
+    <p>给出的行中，可以确定列的顺序是对的，列中上下的顺序是对的。同时有所有点值不同。</p>
+    <p>&nbsp;</p>
+    <h3><a href='https://codeforces.com/contest/1435/problem/C'>C. Perform Easily （div1 A）</a></h3>
+    <p>即每个元素有六种可选权值，选其中之一，求所有元素的最小极差。</p>
+    <p><del>想了四十分钟 dp 哭辽...</del></p>
+    <p>把所有权值放一起排序得到数组 $V$。类似扫描线、区间数颜色，对于确定的一个 $L$，有一个最小的 $R$ 使得权值在 $[L,R]$ 中的元素种类有 $n$ 种。用 $V_R-V_L$ 更新答案。移动 $L$ 即可。复杂度 $O(6n \log n)$，瓶颈在排序。</p>
+    <p>&nbsp;</p>
+    <h3><a href='https://codeforces.com/contest/1435/problem/D'>D. Shurikens (div1 B)</a></h3>
+    <p>FST 祭。</p>
+    <p>比赛时的思路是贪心，维护一个栈存储位置，遇到一个 + 操作就把位置加进去，遇到 - 操作就把栈顶（即最近的一次加入）的值设为 $x$。判断是否有位置，上一次 - 操作后是否又有加入并且这次小于上一次。</p>
+    <p>这样是有问题的。构造数据++-+++----，虽然后面四次递增可以通过以上判断，但如果最后一次取出的值小于第一次取出的值，还是不合法的。</p>
+    <p>并且有一种数据是 n=10,+++,-9。显然也是不对的。</p>
+    <p>也许可以通过链表维护一下做到 $O(n)$ ... 也有其他方法。我懒..就直接记录下所有操作，最后再模拟一遍，看结果一不一样，不一样一定无解。</p>
+    <p>&nbsp;</p>
+    <h3><a href='https://codeforces.com/contest/1435/problem/E'>E. Solo mid Oracle (div1 C)</a></h3>
+    <p>考虑几种情况。按顺序，后面的默认不满足前面的条件。</p>
+    <ol start=''>
+      <li>$bc &lt; a$，只要慢慢磨，无论多大都能杀死，答案为 $-1$。</li>
+      <li>$c \le d$ ，答案为 $a$。</li>
+      <li>$c$ 可以分为长度为 $d$ 的若干段。最开始的几次，这些段内的恢复是 $1bd$，$2bd$，$3bd$，...。可以发现在某个时刻后，恢复速度不会再改变。只要考虑前面的那些时间，最大的伤害值减回复值一定在这里面取到，因为不满足情况(1)，这时杀不死以后也杀不死。这个时间是恢复值恰卡在伤害值的时候，即 $t=\lfloor\frac{a}{bd}\rfloor$。剩下的就是等差数列求和之类的了。</li>
+    </ol>
+    <p>&nbsp;</p>
+    <p>其他：咕咕咕！</p>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

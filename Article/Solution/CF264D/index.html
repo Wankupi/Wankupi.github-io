@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>CF264D Colorful Stones 题解</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <h1>CF264D Colorful Stones 题解</h1>
+  <div id="contain" class="card">
+    <p>部分借鉴了官方题解和<a href='https://www.cnblogs.com/lishuyu2003/p/11502858.html'>这篇</a>，<del>甚至还剽了他的图</del>。</p>
+    <p>考虑如果现在有一个起始状态和终止状态，想知道能不能构造出一个串 $I$ 到达终止状态：
+      <img src="https://assets.codeforces.com/images/162/CF162D1.png" referrerpolicy="no-referrer" alt="CF162D1.png (600×240) (codeforces.com)"></p>
+    <p>图中 $A,C$ 是要走过的位置，如果能走到，要满足</p>
+    <ul>
+      <li>$A$ 是 $I$ 的子序列且 $B$ 不是；</li>
+      <li>$C$ 是 $I$ 的子序列且 $D$ 不是。</li>
+    </ul>
+    <p>能构造出 $I$ 的一个必要条件是 $B$ 不是 $C$ 的子序列 且 $D$ 不是 $A$
+      的子序列。（不妨叫它<strong>条件1</strong>。）但计数要用充分必要条件，所以我们需要看一看它是不是充分的。（先举个反例：A=&quot;GBG&quot;，B=&quot;GBGB&quot;，C=&quot;BGB&quot;，D=&quot;BGBG&quot;。）
+    </p>
+    <p>把这个状态记作 $(A,B,C,D)$，令 $A'$ 为 $A$ 去掉第一个字符后的串，其他类似。</p>
+    <p><img src="https://assets.codeforces.com/images/162/CF162D2.png" referrerpolicy="no-referrer" alt="CF162D2.png (600×240) (codeforces.com)"></p>
+    <p>分情况讨论一下，</p>
+    <ul>
+      <li>
+        <p>若 $c1=c2$，只要构造一位 $c1$，就转移到状态 $(A',B',C',D')$，一定满足<strong>条件1</strong>；</p>
+      </li>
+      <li>
+        <p>若 $c1\not=c2$，</p>
+        <ul>
+          <li>$B'$ 不是 $C'$ 的子序列，构造一位 $c1$，转移到状态 $(A',B',C,D)$；</li>
+          <li>$D'$ 不是 $A'$ 的子序列，构造一位 $c2$，转移到状态 $(A,B,C',D')$；</li>
+          <li>都不满足，这种情况不合法（比如上面给出的反例）。</li>
+        </ul>
+      </li>
+    </ul>
+    <p>重点关注不合法的情况。手玩几个就会发现，一定是形如
+      A=&quot;...y&quot;，B=&quot;...yx&quot;，C=&quot;...x&quot;，D=&quot;...xy&quot;。统计一下这个的数量，前缀和优化一下。</p>
+    <p>所以答案就是满足<strong>条件1</strong>的且$B$ 以xy结尾时，$D$ 不以yx结尾。</p>
+    <p>考虑在 $s$ 串中走到了 $i$ （站在 $i$ 处，匹配完了前 $i-1$ 个），可以维护出一个区间 $[l,r]$ 表示在 $t$ 串中最少/最多站到哪个位置。则 $[l,r]$ 中排除掉不合法的就是这一次的答案。
+    </p>
+    <p>代码：</p>
+    <pre><code class='language-cpp' lang='cpp'>#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+int const maxn = 1000003;
+int n = 0, m = 0;
+char a[maxn], b[maxn];
+int s[3][3][maxn];
+
+int main() {
+	scanf(&quot;%s%s&quot;, a + 1, b + 1);
+	n = strlen(a + 1);
+	m = strlen(b + 1);
+	for (int i = 1; i &lt;= n; ++i) a[i] %= 3;
+	for (int i = 1; i &lt;= m; ++i) b[i] %= 3;
+	for (int x = 0; x &lt; 3; ++x)
+		for (int y = 0; y &lt; 3; ++y)
+			for (int i = 2; i &lt;= m; ++i) {
+				s[x][y][i] = s[x][y][i - 1];
+				if (b[i - 1] == x &amp;&amp; b[i] == y) ++s[x][y][i];
+			}
+	int l = 1, r = 1;
+	while (r &lt; m &amp;&amp; b[r] != a[1]) ++r;
+	long long ans = r - l + 1; // 这一次不用排除什么
+	for (int i = 2; i &lt;= n; ++i) {
+		if (l &lt;= m &amp;&amp; a[i - 1] == b[l]) ++l;
+		if (l &gt; m) break;
+		if (r &lt; m) {
+			++r;
+			while (r &lt; m &amp;&amp; b[r] != a[i]) ++r;
+		}
+		if (l &gt; r) continue;
+		int x = a[i - 1], y = a[i];
+		ans += r - l + 1;
+		if (x != y) ans -= s[y][x][r] - s[y][x][l - 1];
+	}
+	printf(&quot;%lld&quot;, ans);
+	return 0;
+}
+</code></pre>
+    <p>&nbsp;</p>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

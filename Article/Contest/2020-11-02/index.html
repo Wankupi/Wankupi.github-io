@@ -1,0 +1,67 @@
+<!Doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>模拟赛总结 2020-11-02</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div id="contain" class="card">
+    <h1>模拟赛总结 2020-11-02</h1>
+    <p>哎。。今天有点蠢...考到大概两个小时多，写完了前三道题。我有点忘怎么在shell里去掉文件名尾缀，然后写了一行：</p>
+    <p><code style="background-color: gainsboro;">for i in ls(*.cpp); do echo ${i} -&gt; ${i%.}; done;</code></p>
+    <p>自闭。</p>
+    <p>&nbsp;</p>
+    <h3>T1 计算异或和(calcxor)</h3>
+    <blockquote>
+      <p>$n$ 个正整数 $p_1,p_2,\cdots,p_n$，定义 $q_i=p_i \mathrm{xor}(i\bmod 1)\mathrm{xor}\cdots\mathrm{xor}(i\bmod n)$。 定义 $Q=q_1\mathrm{xor}\cdots\mathrm{xor}q_n$。求 $Q$ 。</p>
+    </blockquote>
+    <p>正整数异或是交换群，简单推一下就行。</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <h3>T2 配置香水(perfume)</h3>
+    <blockquote>
+      <p>求区间和是$k$的非负整数幂的区间个数。</p>
+    </blockquote>
+    <p>写的 $O(n\log_2 n \log_k{10^{15}})$，用 map 维护的，一点卡常每加，跑得飞快...</p>
+    <p>&nbsp;</p>
+    <h3>T3 奥法之劫(offa)</h3>
+    <blockquote>
+      <p>十分长的题面...<a href="./problem.pdf" target="_blank">给个pdf链接好了</a></p>
+    </blockquote>
+    <p>一个 $a_i$ 只能和最多一个的 $b_j$ 对应上。设 $f_i$ 为考虑完前缀 $[1,i]$ ，强制选择了 $a_i$ 的最小代价和。$f_i$ 仅在存在$b_j$与$a_i$ 对应时有定义。</p>
+    <p>考虑如何转移，这个是跟 $a_i$ 与谁对应有关的。假设现在在考虑$x$，它对应 $b$ 数组中的下标为 $k$ 。那么它从前面的一个对应下标是$k-1$ 的 $y$ 转移过来。代价是区间 $(y,x)$ 中 $a$ 值大于 $a_y$ 的，以及 $p$ 值为负的那些位置的$p$。</p>
+    <div>$$ f(x)=\min_{y}\{f(y) + \sum_{i=y+1}^{x-1}p_i[a_i&gt;a_y \vee p_i&lt;0]\} $$
+    </div>
+    <p>和式里的东西用扫描线的思想，拆成两半，发现取最小的就只与 $y$ 有关了。以权值为下标，$p$ 为值，维护区间和。然后发现跟 $y$ 关系只在于对应的是$k-1$罢了。直接对每个 $b$ 中的下标维护一下最小值，边扫边更新即可。</p>
+    <p>复杂度 $O(n\log n)$，用树状数组，常数很小，跑得比昂昂的 $O(n)$ 快。嗯...$5e6$ 大概是可以的。因为我的愚蠢导致没有充足的时间仔细思考，写挂了细节。</p>
+    <p>$O(n)$ 似乎是根据一步贪心...昂昂讲了半天我还是没懂，看来我还是太菜了。</p>
+    <b>update 11-03:</b>
+    <p>大概理解了昂昂的意思，用到了费用提前计算的思想，对一个 $a_i$ 满足 $b_j \leq a_i &lt; b_{j+1}$ ，把它的费用放到$j+1$上去计算。<a href="https://alan-sp.github.io/post/ao-fa-zhi-jie-ti-jie/" target="_blank">链接</a></p>
+    <p>&nbsp;</p>
+    <h3>T4 多彩树(tree)</h3>
+    <blockquote>
+      <p>给一棵树，有点权 $c$。点权在模$C$ 意义下，$C \le 3$。一条边$(x,y)$可以经过如果 $(c_x\pm 1)\equiv c_y \pmod{C}$。</p>
+      <p>要求支持修改点权，查询从某点开始能到达的点的数量。</p>
+    </blockquote>
+    <p>暴力写挂。看到 subtask1 中满足 $C=1$，直接输出了 $q$ 个 $n$..然而实际查询没这么多...于是爆零。</p>
+    <p>&nbsp;</p>
+    <h4>代码链接</h4>
+    <ul>
+      <li><a target="_blank" href="./calcxor.cpp">calcxor</a></li>
+      <li><a target="_blank" href="./perfume.cpp">perfume</a></li>
+      <li><a target="_blank" href="./offa.cpp">offa</a></li>
+    </ul>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>

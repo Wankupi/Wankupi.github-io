@@ -1,0 +1,346 @@
+@charset "UTF-8";
+* {
+  box-sizing: border-box;
+}
+
+.nocopy {
+  -moz-user-select: none;
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans CJK", source-sans-pro;
+  margin: 0px;
+  padding: 0px;
+  overflow: overlay;
+  word-break: break-word;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-image: url("../images/background/home-main.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: rgb(240, 240, 240);
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+ ::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.0);
+}
+
+ ::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+ ::-webkit-scrollbar-thumb:hover {
+  background-color: skyblue;
+}
+
+h3 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+#top-panel {
+  display: flex;
+  position: fixed;
+  list-style: none;
+  justify-content: space-around;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3rem;
+  transform: translateY(-5rem);
+  z-index: 10;
+  background-color: white;
+  transition-duration: 0.4s;
+  box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.5);
+}
+
+#top-title {
+  cursor: pointer;
+}
+
+#Greet {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  background: url("../images/background/home-greet-horizontal.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+#Name {
+  display: block;
+  position: relative;
+  top: calc(37.2% - 2.25rem);
+  text-align: center;
+}
+
+#name-zh {
+  position: relative;
+  display: inline-block;
+  font-family: "Microsoft YaHei";
+  font-size: 4rem;
+  color: #000000;
+}
+
+#name-zh::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  left: 0px;
+  bottom: 0px;
+  background-color: rgba(0, 255, 255, 1.0);
+  transform: scaleX(0.3);
+  transform-origin: center center;
+  transition-property: transform, background-color;
+  transition-duration: 0.3s;
+  transition-timing-function: linear;
+}
+
+#name-zh:hover::after {
+  height: 2px;
+  background-color: rgba(255, 0, 0, 1.0);
+  transform: scaleX(1.15);
+}
+
+#name-en {
+  display: inline-block;
+  font-family: "Varela Round", "Comic Sans Ms";
+  font-size: 3.5rem;
+  color: #717070;
+  text-shadow: 0rem 0rem 0.4rem rgba(255, 255, 255, 1.0);
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(1, .35, .51, .83);
+}
+
+#name-en:hover {
+  color: rgb(255, 255, 255);
+  text-shadow: 0rem 0rem 0.4rem rgb(255, 208, 1.0);
+}
+
+#PersonalSignature {
+  text-align: center;
+  color: #666666;
+}
+
+.scroll-down {
+  position: absolute;
+  width: 2rem;
+  bottom: 5em;
+  left: calc(50vw - 0.5 * 2rem);
+  right: calc(50vw - 0.5 * 2rem);
+  cursor: pointer;
+}
+
+.scroll-down img {
+  height: 2rem;
+}
+
+main {
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1rem;
+  max-width: 30cm;
+}
+
+nav.Side {
+  position: sticky;
+  top: 4rem;
+  right: 1rem;
+  float: right;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: calc(25% - 1em);
+}
+
+.side-card {
+  padding: 1rem;
+  margin-top: 1rem;
+  background-color: rgba(255, 255, 255, 0.767);
+  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.5);
+  border-right: springgreen 3px solid;
+  text-align: center;
+}
+
+#hitokoto img {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+#hitokotoWho {
+  text-align: right;
+  color: #555;
+}
+
+#hitokotoWho:empty {
+  visibility: hidden;
+}
+
+#hitokotoWho::before {
+  content: "——";
+}
+
+.FriendLink {
+  position: relative;
+  min-height: 1.5rem;
+  transition-duration: 0.3s;
+}
+
+.FriendLink:hover {
+  box-shadow: 0 0 5px greenyellow;
+}
+
+.FriendLink>a:hover {
+  color: skyblue;
+}
+
+#contact-me img {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+#articles {
+  min-height: 100vh;
+  width: 75%;
+  left: 0px;
+  padding-top: 2rem;
+}
+
+.card {
+  background-color: white;
+  margin: 1rem;
+  padding: 1rem;
+  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.5);
+  border-left: skyblue 3px solid;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 2px 2px 8px 2px rgba(0, 0, 0, 0.5);
+}
+
+.art-title {
+  text-align: center;
+}
+
+.art-title>a {
+  position: relative;
+}
+
+.art-title>a::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  background-color: yellow;
+  transform-origin: center center;
+  transform: scaleX(0.0);
+  transition-duration: 0.3s;
+  transition-property: transform;
+}
+
+.art-title>a:hover::after {
+  transform: scaleX(1.2);
+}
+
+.card.more-art {
+  border-bottom: black 2px solid;
+}
+
+.card.more-art .art-title {
+  font-family: "楷体";
+  font-size: 2rem;
+}
+
+footer {
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  background-color: rgb(51, 51, 51);
+  font-size: small;
+  color: white;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a.license {
+  text-decoration: underline;
+  color: white;
+}
+
+@media (max-aspect-ratio: 3/5) {
+  #Greet {
+    background-image: url("../images/background/home-greet-vertical.jpg");
+  }
+  nav.Side {
+    position: unset;
+    float: none;
+    width: 90%;
+    right: 0;
+    max-width: unset;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3rem;
+    top: unset;
+  }
+  .side-card {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  #articles {
+    width: 100%;
+    padding-top: 0;
+  }
+}
+
+@keyframes up-down {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-0.5rem);
+    opacity: 1.0;
+  }
+}
+
+.up-down {
+  animation: up-down 2s ease-in-out infinite;
+}

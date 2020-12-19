@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width initial-scale=1'>
+  <title>模拟赛总结 2020-10-23</title>
+  <meta name="keywords" content="Wankupi,王鲲鹏,blog,博客,Blog,wankupi,oier">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+  <script src="/static/js/loads.js" async></script>
+</head>
+
+<body>
+  <div id="contain" class="card">
+    <h1>模拟赛总结 2020-10-23</h1>
+    <p>&nbsp;</p>
+    <h3>T1 完全平方数(square)</h3>
+    <blockquote>
+      <p>有 $n$ 个数 $\{a\}$，求有多少个区间 $[l,r]$ 满足 $\displaystyle\prod_{i=l}^{r}a_i$ 为完全平方数。$n,a_i\le 10^5$。</p>
+    </blockquote>
+    <p>区间的积的所有质因子的次数都是偶数。</p>
+    <p>对每个数 $a_i$，偶数次的质因子无关答案，只考虑奇数次的。对每个质数 $p$ 随机一个权值 $R_p$。记 $b_i=\mathrm{XOR}\{R_p[p的次数为奇数]\}$。如果一个区间的 $b_i$ 的异或和是0，就说明这个区间的积是完全平方数。</p>
+    <p>求前缀，用 map 维护出现次数即可。</p>
+    <p>&nbsp;</p>
+    <h3>T2 优先队列(queue)</h3>
+    <blockquote>
+      <p>维护数集，支持加入一个正整数 $x$，取出第 $k$ 大的数。（ $k$ 是固定的）空间 32MB</p>
+    </blockquote>
+    <p>对顶堆 or 平衡树 等线性空间的数据结构。</p>
+    <p>&nbsp;</p>
+    <h3>T3 宝藏(treasure)</h3>
+    <blockquote>
+      <p>给一张 $n$ 个点的无向图（$n \le 500$），$m$ 条边（$m \le 2n^2$），边只有 $0$ 、$1$ 两种权值。从 $1$ 号点出发，按照数列 $\{a\}$ 前进，第 $i$ 步的边权必须等于 $a_i$。求最多走多少步。如果走 $10^{18}$ 步以上，则输出 $-1$。</p>
+      <p>数列：初始是0，每次取反并接在后面。01101001...</p>
+    </blockquote>
+    <p>每一个单步，要么走 $0$ 边，要么走 $1$ 边。考虑分别对 $0,1$ 边做出邻接矩阵。</p>
+    <p>观察这个数列，倍增的过程是非常有特点的：</p>
+    <p>0 -&gt; 01 -&gt; 0110 -&gt; 01101001-&gt;...</p>
+    <p>如果当前是 A，它的反是B，倍增后就是 AB，反是BA。如此可以用矩阵乘法求出走 $2^j$ 步的矩阵。</p>
+    <div>$$ F[i][0]=F[i-1][0] \times F[i-1][1]\\ F[i][1]=F[i-1][1] \times F[i-1][0] $$
+    </div>
+    <p>预处理出走 $2$ 的 $1\cdots \log_2{10^{18}}$ 次幂的矩阵，当 1 不能到任意点时就停止预处理，如果最后都没停就输出 $-1$。</p>
+    <p>从高位向低位贪心考虑即可。</p>
+    <p>复杂度 $O(n^3\log_210^{18})$。考虑用 bitset 优化矩阵乘法...然后跑得飞快。</p>
+    <p>有个细节，如果上一次走的是 $F[][1]$，那这一次就要走 $F[][0]$，反之亦然。仔细考虑数列倍增的过程，即可简单证明。</p>
+    <pre><code class='language-cpp' lang='cpp'>#include &lt;bitset&gt;
+#include &lt;cstdio&gt;
+using namespace std;
+unsigned long long ll;
+int n = 0, m = 0;
+struct Matrix {
+	Matrix() {}
+	Matrix(int) { for (int i = 1; i &lt;= n; ++i) a[i][i] = true; }
+	bitset&lt;501&gt; a[501];
+	bitset&lt;501&gt; &amp;operator[](int x) { return a[x]; }
+	bitset&lt;501&gt; const &amp;operator[](int x) const { return a[x]; }
+};
+inline void muti(Matrix &amp;r, Matrix const &amp;A, Matrix const &amp;B) { // ensure r is empty
+	for (int k = 1; k &lt;= n; ++k)
+		for (int i = 1; i &lt;= n; ++i)
+			if (A[i][k]) r[i] |= B[k];
+}
+Matrix F[65][2], R;
+int Limit = -1;
+void prepare() {
+	R[1][1] = true;
+	for (int i = 1; i &lt;= 61; ++i) {
+		muti(F[i][0], F[i - 1][0], F[i - 1][1]);
+		muti(F[i][1], F[i - 1][1], F[i - 1][0]);
+		if (!F[i][0][1].any()) { Limit = i - 1; break; }
+	}
+}
+long long A = 0;
+void solve() {
+	int cur = 0;
+	for (int j = Limit; j &gt;= 0; --j) {
+		Matrix T; muti(T, R, F[j][cur]);
+		if (T[1].any()) {
+			std::swap(R, T);
+			A |= (1ll &lt;&lt; j);
+			cur ^= 1;
+		}
+	}
+}
+int main() {
+	scanf(&quot;%d %d&quot;, &amp;n, &amp;m);
+	int x = 0, y = 0, z = 0;
+	for (int i = 1; i &lt;= m; ++i) {
+		scanf(&quot;%d %d %d&quot;, &amp;x, &amp;y, &amp;z); F[0][z][x][y] = true;
+	}
+	prepare();
+	if (Limit == -1) { printf(&quot;-1&quot;); return 0; }
+	solve();
+	printf(&quot;%lld&quot;, A);
+	return 0;
+}
+</code></pre>
+    <p>&nbsp;</p>
+    <h3>T4 admirable</h3>
+    <blockquote>
+      <p>在 $n$ 的点的树上，选出 $k$ 条路径，满足至少有一条公共边。一条边被覆盖的次数 $m\in\{0,1,k\}$。求方案数。</p>
+      <p>路径 $(a,b)$ 和 $(b,a)$ 是等价的。两种方案 $A$ 和 $B$ 不同当且仅当存在 $i\in[1,k],A_i\not=B_i$。</p>
+      <p>模 $10^9+9$</p>
+    </blockquote>
+    <p><del>我太菜了不会</del>。</p>
+    <p>有原题 <a href='https://codeforces.com/problemset/problem/981/H'>CF981H</a>。</p>
+    <p>还变了 NTT 模数。。蒟蒻完全没学过多项式哭辽...</p>
+    <p>&nbsp;</p>
+  </div>
+  <div id="Comment" class="card"></div>
+</body>
+
+</html>
