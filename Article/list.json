@@ -191,7 +191,7 @@
   {
     "title": "[九省联考2018]秘密袭击coat",
     "path": "Solution/LuoguP4365",
-    "outline": "题面：给定一棵 $n$ 个点的树，每个点有点权 $d$，满足 $d\\le W$，和一个排名 $k$（$k\\le n$），求$$\\sum_{S\\subset T}k\\text{th of }S \\qquad\\text{S是连通块}$$ $n\\le 1666$，$W\\le1666$。Solution：既然有正解做法，还是想学习正解吖。",
+    "outline": "题面：给定一棵 $n$ 个点的树，每个点有点权 $d$，满足 $d\\le W$，和一个排名 $k$（$k\\le n$），求 $\\displaystyle\\sum_{S\\subset T}k\\text{th of }S$, ($S$是连通块)，$n\\le 1666$，$W\\le1666$。Solution：既然有正解做法，还是想学习正解吖。",
     "date": "2020-12-26T09:43:00Z"
   },
   {
