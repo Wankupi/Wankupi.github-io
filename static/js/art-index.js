@@ -1,31 +1,31 @@
 
 let $ = (s => document.querySelectorAll(s));
-let top_panel = $("#top-panel")[0], block = $("#articles")[0], artCount = $("#art-count")[0];
-let count = {}, arts;
+let top_panel = $("#top-panel")[0], block = $("#articles")[0], artCount = $("#art-count")[0], q = $("#q")[0];
+let arts;
 
-let search = new URLSearchParams(location.search).getAll("q");
-
-if (search.length > 0) $("header>.title")[0].innerText = "搜索结果";
+let USP = new URLSearchParams(location.search);
+let keys = USP.getAll("q"), m = USP.get("m") || "OR";
+if (keys.length) q.value = keys;
 
 function checkArt(a) {
-  if (search.length == 0) return true;
-  for (let i = 0; i < search.length; ++i)
-    if (a.title.match(search[i]) != null || a.type.match(search[i]) != null ||
-      a.outline.match(search[i]) != null || a.path.match(search[i]) != null)
-      return true;
-  return false;
+  if (keys.length == 0) return true;
+  let cnt = 0;
+  for (let i = 0; i < keys.length; ++i)
+    if (a.title.indexOf(keys[i]) != -1 || a.type.indexOf(keys[i]) != -1 ||
+      a.outline.indexOf(keys[i]) != -1 || a.path.indexOf(keys[i]) != -1)
+      ++cnt;
+  return m != "OR" ? (cnt == keys.length) : (cnt > 0);
 }
 
 function putArts() {
   function DateToHTML(d) {
-    if (d) {
-      let t = new Date(d);
-      return `${t.getFullYear()}-${(t.getMonth() + 1).toString().padStart(2, '0')}-${t.getDate().toString().padStart(2, '0')} ` +
-        `${t.getHours().toString().padStart(2, "0")}:${t.getMinutes().toString().padStart(2, "0")}`;
-    }
-    else return "";
+    if ((typeof d) != "string") return "";
+    let t = new Date(d);
+    return `${t.getFullYear()}-${(t.getMonth() + 1).toString().padStart(2, '0')}-${t.getDate().toString().padStart(2, '0')} ` +
+      `${t.getHours().toString().padStart(2, "0")}:${t.getMinutes().toString().padStart(2, "0")}`;
   }
-  let art_html = "";
+  $("header>.title")[0].innerText = (keys.length > 0 ? "搜索结果" : "文章列表");
+  let art_html = "", count = {};
   for (let i = arts.length - 1; i >= 0; --i) {
     arts[i].type = arts[i].path.split("/")[0];
     if (!checkArt(arts[i])) continue;
@@ -49,12 +49,3 @@ function putArts() {
   if (MathJax.typesetPromise) MathJax.typesetPromise(); else MathJax.startup.typeset = true;
 }
 fetch("list.json").then(r => r.json()).then(s => { arts = s; putArts(); });
-/*
-function scrollMove(e) {
-  let height = document.documentElement.clientHeight;
-  let H = document.documentElement.scrollTop;
-  if (H < height) {
-    top_panel.style.transform = "translateY(" + H / 5 + "px)";
-  }
-}
-document.addEventListener("scroll", scrollMove);*/

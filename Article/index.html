@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="zh-Hans">
 
 <head>
   <meta charset="utf-8">
@@ -15,10 +15,17 @@
 
 <body>
   <header class="top-panel">
-    <div class="avatar"><img src="/static/images/icon.png" class="round no-select"></div>
+    <div class="avatar"><img src="/static/images/icon.png" class="round no-select" alt=""></div>
     <div class="title">文章列表</div>
     <div id="art-count"></div>
-    <div>站内文章采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode" target="_blank"rel="noopener noreferrer" class="license">CC BY-NC-SA 4.0 知识共享公共许可协议</a> 许可。</div>
+    <div>站内文章采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode" target="_blank"
+        rel="noopener noreferrer" class="license">CC BY-NC-SA 4.0 知识共享公共许可协议</a> 许可。</div>
+    <div>
+        <div class="search-box">
+      <form method="GET">
+        <input class="search" type="text" name="q" required id="q" placeholder="搜索文章 | 标题 摘要 路径" title="关键字"><input type="submit" value="搜索">
+      </form>
+    </div></div>
   </header>
   <main>
     <div id="articles" class="art-container"></div>
