@@ -13,7 +13,7 @@
 			background: #eedceb;
 		}
 
-		#container {
+		.container {
 			margin: 2em;
 			text-align: center;
 		}
@@ -65,9 +65,9 @@
 		a::after {
 			content: "";
 			position: absolute;
-			left: 0px;
-			right: 0px;
-			bottom: 0px;
+			left: 0;
+			right: 0;
+			bottom: 0;
 			height: 1px;
 			background-color: red;
 			width: 100%;
@@ -84,7 +84,7 @@
 </head>
 
 <body>
-	<div id="container">
+	<div class="container">
 		<button onclick="dec()">-</button>
 		<button onclick="add()">+</button>
 		<button onclick="ABC()" id="switch">开始随机</button>
@@ -112,7 +112,7 @@
 		function $(s) {
 			return document.querySelectorAll(s);
 		}
-		var n = 11;
+		var n = 13;
 		let status = false;
 		function func() {
 			let r = $("#res")[0];
