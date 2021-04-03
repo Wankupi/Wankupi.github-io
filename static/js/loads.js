@@ -15,7 +15,8 @@ addCSS_wankupi("/static/css/highlight.css");
 
 (function () {
   let d = document.createElement("script");
-  d.src = "https://cdn.jsdelivr.net/npm/mathjax/es5/tex-chtml.js";
+  // d.src = "https://cdn.jsdelivr.net/npm/mathjax/es5/tex-chtml.js";
+  d.src = "/static/js/MathJax/es5/tex-chtml.js";
   d.async = true;
   document.head.appendChild(d);
 })();
