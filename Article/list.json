@@ -211,5 +211,11 @@
     "path": "Solution/gym102759D",
     "outline": "给$n$个点构成无向图，两两之间都有边。其中一些边权是固定的，其他的边权是可以由你设置的。记 $C(i,j)$ 为边 $(i,j)$ 的权值。如果存在三个点 $i,j,k$ 使得 $C(i,j)&lt;C(i,k)$且$C(i,j)&lt;C(j,k)$，就不好。问你能否让这个图是好的，如果能还要最小化边权和，即最小化$$\\sum_{i=1}^{n}\\sum_{j=i+1}^nC(i,j)$$",
     "date": "2021-02-07T02:12:00Z"
+  },
+  {
+    "title": "省选加油",
+    "path": "Anecdotes/wish",
+    "outline": "祝 AzusaCat BlueQuantum 及北校各巨佬AK省选！！！",
+    "date": "2021-04-09T15:03:17.264Z"
   }
 ]
