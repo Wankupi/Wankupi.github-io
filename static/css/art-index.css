@@ -113,50 +113,6 @@ main {
   text-align: center;
 }
 
-.art-meta {
-  text-align: center;
-  color: grey;
-  font-size: 1rem;
-}
-
-.art-meta>* {
-  margin-left: 1em;
-}
-
-.art-outline {
-  color: black;
-}
-
-.art-outline {
-  text-indent: 2em;
-}
-
-.art-type {
-  width: 10em;
-}
-
-.art-type::before {
-  content: "";
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  background: url("../images/art-type.png");
-  background-size: 100% 100%;
-}
-
-.art-date:empty {
-  display: none;
-}
-
-.art-date::before {
-  content: "";
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  background: url("../images/art-date.png");
-  background-size: 100% 100%;
-}
-
 a {
   text-decoration: none;
   color: #93b5cf;
