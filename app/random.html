@@ -112,9 +112,10 @@
 		function $(s) {
 			return document.querySelectorAll(s);
 		}
-		var n = 15;
+		var n = 16;
 		let status = false;
 		function func() {
+			if (n > 100) n = 100;
 			let r = $("#res")[0];
 			let a = [];
 			for (let i = 0; i < n; ++i)
