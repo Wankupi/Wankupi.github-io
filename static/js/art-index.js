@@ -5,14 +5,20 @@ let arts;
 
 let USP = new URLSearchParams(location.search);
 let keys = USP.getAll("q"), m = USP.get("m") || "OR";
-if (keys.length) q.value = keys;
+
+if (keys.length) {
+  for (let i = 0; i < keys.length; ++i)
+    keys[i] = keys[i].toLowerCase();
+  q.value = keys;
+}
+
 
 function checkArt(a) {
   if (keys.length == 0) return true;
   let cnt = 0;
   for (let i = 0; i < keys.length; ++i)
-    if (a.title.indexOf(keys[i]) != -1 || a.type.indexOf(keys[i]) != -1 ||
-      a.outline.indexOf(keys[i]) != -1 || a.path.indexOf(keys[i]) != -1)
+    if (a.title.toLowerCase().indexOf(keys[i]) != -1 || a.type.toLowerCase().indexOf(keys[i]) != -1 ||
+      a.outline.toLowerCase().indexOf(keys[i]) != -1 || a.path.toLowerCase().indexOf(keys[i]) != -1)
       ++cnt;
   return m != "OR" ? (cnt == keys.length) : (cnt > 0);
 }
