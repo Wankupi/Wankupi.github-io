@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width initial-scale=1">
+  <title>支配树学习笔记</title>
+  <meta name="keywords" content="支配树">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+</head>
+
+<body>
+  <div class="card art-container">
+    <h1 id="支配树学习笔记">支配树学习笔记</h1>
+    <span>\(\newcommand{idom}{\operatorname{idom}}\)</span> <span>\(\newcommand{semi}{\operatorname{semi}}\)</span>
+    <span>\(\newcommand{dfn}{\operatorname{dfn}}\)</span>
+    <p>给定一张有向图，设定源点为 <span>\(s\)</span>，则从 <span>\(s\)</span> 出发到 <span>\(x\)</span> 必须经过的点（不包括
+      <span>\(x\)</span>）称为支配点。（含不含自己影响不大，灵活处理就好）
+    </p>
+    <p>若 <span>\(a\)</span> 支配 <span>\(b\)</span>，则 <span>\(a\)</span> 是 <span>\(b\)</span> 的支配点，在图中删去
+      <span>\(a\)</span> 点后不能从 <span>\(s\)</span> 到达 <span>\(b\)</span>。
+    </p>
+    <p>支配关系是传递的、反对称的。</p>
+    <p>若 <span>\(b\)</span> 支配 <span>\(a\)</span>，且 <span>\(c\)</span> 支配 <span>\(a\)</span>，必然有 <span>\(b\)</span> 支配
+      <span>\(c\)</span> 或者 <span>\(c\)</span> 支配 <span>\(b\)</span>。显然一个点的所有支配点可以构成一个链，所有点与其最近支配点连线可以构成一个树。
+    </p>
+    <p>以下的讨论建立在某一颗dfs树上。强烈建议阅读时自己画画草图示意。</p>
+    <p>定义 <span>\(\idom_{x}\)</span> 表示 <span>\(x\)</span> 的最近支配点， 也是深度最大的。定义
+      <span>\(\semi_x\)</span> 表示 <span>\(x\)</span> 的半支配点。半支配点 <span>\(\semi_x\)</span> 为 <span>\(\dfn\)</span> 最小的点
+      <span>\(y\)</span>，满足存在一条路径 <span>\((y,v_1,v_2,\cdots,v_c,x)\)</span> 使得 <span>\(\forall
+        i\in\{1,2,\cdots,c\}\)</span>，<span>\(\dfn[v_i]&gt;\dfn[x]\)</span>。
+    </p>
+    <p><span>\(\semi_x\)</span> 的一种含义是，在反图上，在从 <span>\(x\)</span> 出发，只途经（不包括端点）
+      <span>\(\dfn\)</span> 大于 <span>\(\dfn[x]\)</span> 的点能到达的 <span>\(\dfn\)</span> 最小的点。
+    </p>
+    <h4 id="半支配点的性质">半支配点的性质：</h4>
+    <ul>
+      <li>每个点的 <span>\(\semi\)</span> 的唯一的。（ <span>\(\dfn\)</span> 的有序性）</li>
+      <li><span>\(\semi_x\)</span> 是 <span>\(x\)</span> 在dfs树上的祖先。
+        <details>
+          <summary>证明</summary>
+          <p>首先证明 <span>\(\dfn[\semi_x]&lt;\dfn[x]\)</span>。考虑一个点
+            <span>\(y\)</span>，<span>\(\dfn[y]&gt;\dfn[x]\)</span>，存在一条满足条件的路径，那么
+            <span>\(y\)</span>
+            的父节点也满足条件。如果父节点的 <span>\(\dfn\)</span> 仍大于 <span>\(\dfn[x]\)</span>，重复找父节点即可。
+          </p>
+          <p>再证明，若 <span>\(\dfn[y]&lt;\dfn[x]\)</span>
+            且 <span>\(y\)</span> 不是 <span>\(x\)</span>
+            的祖先，一定不存在满足该条件的路径。反证法，若存在路径，则dfs过程中，<span>\(y\)</span> 节点回溯前，已访问过 <span>\(x\)</span>，<span>\(x\)</span> 在
+            <span>\(y\)</span> 子树内。
+          </p>
+        </details>
+      </li>
+      <li>如果有边 <span>\((y,x)\)</span>，且 <span>\(\dfn[x]&lt;\dfn[y]\)</span>，有
+        <span>\(\dfn[\semi_x]\le \dfn[\semi_y]\)</span>。
+      </li>
+    </ul>
+    <h4 id="半支配点和支配点的关系">半支配点和支配点的关系</h4>
+    <ul>
+      <li><span>\(\semi_x\)</span> 不一定是 <span>\(\idom_x\)</span>。</li>
+      <li><span>\(\idom_x\)</span> 在 <span>\(\semi_x\)</span> （含）到根节点的链上。</li>
+      <li>利用 <span>\(\semi\)</span> 求 <span>\(\idom\)</span>。（不然为什么引入半支配点的概念！）
+      </li>
+    </ul>
+    <h4 id="如何求-idom">如何求 <span>\(\idom\)</span> ？</h4>
+    <p>在 dfs 树上，抽出 <span>\(\semi_x\)</span> 到 <span>\(x\)</span> 的链（不含端点）。</p>
+    <p>设其中 <span>\(z\)</span> 点的 <span>\(\semi\)</span> 的 <span>\(\dfn\)</span> 最小。必有 <span>\(\dfn[\semi_z]\le
+        \dfn[\semi_x]\)</span>
+      ，因为链上第一个点的 <span>\(\semi\)</span> 只可能是 <span>\(\semi_x\)</span> 及其祖先。</p>
+    <ul>
+      <li>如果 <span>\(\semi_z = \semi_x\)</span>，那么 <span>\(\idom_x=\semi_x\)</span>。</li>
+      <li>如果 <span>\(\dfn[\semi_z]&lt;\dfn[\semi_x]\)</span>，那么 <span>\(\idom_x=\idom_z\)</span>。 <details>
+          <summary>证明</summary> 因为 <span>\(\dfn[\semi_z]&lt;\dfn[\semi_x]\)</span> ，所以从 <span>\(\semi_z\)</span> 到
+          <span>\(z\)</span> 不需要经过 <span>\(\semi_x\)</span>。<span>\(z\)</span> 能到达 <span>\(x\)</span>，所以存在路径不经过
+          <span>\(\semi_x\)</span>，故 <span>\(\semi_x\)</span> 不是 <span>\(x\)</span> 的支配点。同理，从
+          <span>\(\semi_x\)</span>（含）到 <span>\(\semi_z\)</span>（不含）链上每一点都不是支配点。 此后，把
+          <span>\(\semi_x\)</span> 到 <span>\(\semi_z\)</span>
+          这段也抽出来考虑，重复上述过程。稍加思索归纳就会发现，对 <span>\(x\)</span> 和 <span>\(z\)</span>
+          的支配点产生影响的是同一条链，故 <span>\(\idom_x=\idom_z\)</span>。</li>
+      </details>
+    </ul>
+    <h4 id="如何求-semi">如何求 <span>\(\semi\)</span> ？</h4>
+    <p>考虑有一条边（不是路径）<span>\((y,x)\)</span>。</p>
+    <ul>
+      <li>如果 <span>\(\dfn[y] &lt; \dfn[x]\)</span>，<span>\(y\)</span> 是它可能的半支配点。
+      </li>
+      <li>如果 <span>\(\dfn[y] &gt; \dfn[x]\)</span>，请上去回看一下含义，归结起来是 <span>\(y\)</span> 到根链上所有 <span>\(\dfn\)</span> 大于
+        <span>\(\dfn[x]\)</span> 的点的 <span>\(\semi\)</span> （这样能覆盖所有情况，而且也没有不符合的情况）。
+      </li>
+    </ul>
+    <h4 id="具体算法lengauer-tarjan">具体算法：Lengauer Tarjan</h4>
+    <h5 id="求-semi">求 <span>\(\semi\)</span></h5>
+    <p>发现影响点 <span>\(x\)</span> 的，第一类直接更新，第二类都满足 <span>\(\dfn[y]&gt;\dfn[x]\)</span>。</p>
+    <p>做法是逆着dfs序来，然后考虑完一个点，把它的 <span>\(\semi\)</span> 信息合并到他的父节点上。用带权并查集维护，每个点的权值为到根的路径上的min。</p>
+    <p>求 <span>\(\semi_x\)</span> 时，对于一条入边 <span>\((y,x)\)</span> 且 <span>\(\dfn[x]&lt;\dfn[y]\)</span> 的情况，查询
+      <span>\(y\)</span> 在并查集中的权。
+    </p>
+    <h5 id="求-idom">求 <span>\(\idom\)</span></h5>
+    <p>求 <span>\(\idom\)</span> 时有操作是查询一条链上的最小 <span>\(\semi\)</span>，一个显然的思路是树剖… 但这样不优雅。发现可以用求 <span>\(\semi\)</span>
+      时的那个并查集来做。</p>
+    <p>当求 <span>\(\semi\)</span> 的过程推进到点 <span>\(x\)</span> 的 <span>\(\semi_x\)</span> 时，在并查集上求 <span>\(x\)</span> 的值就是求
+      <span>\(x\)</span> 到 <span>\(\semi_x\)</span> 这个链上最小值。故求 <span>\(\idom\)</span> 和求 <span>\(\semi\)</span> 同时进行，把求
+      <span>\(\idom_x\)</span> 这件事放到求 <span>\(\semi_x\)</span> 时。
+    </p>
+    <p>具体看代码吧</p>
+    <pre class="cpp"><code>#include &lt;cstdio&gt;
+#include &lt;queue&gt;
+int const maxn = 200003, maxm = 300003;
+
+template&lt;int N, int M&gt;
+struct Graph {
+	int head[N], nxt[M], to[M], cnt;
+	void insert(int u, int e) { nxt[++cnt] = head[u]; head[u] = cnt; to[cnt] = e; }
+	void clear(int n) { cnt = 0; for (int i = 0; i &lt;= n; ++i) head[i] = 0;}
+};
+
+int n = 0, m = 0;
+
+Graph&lt;maxn, maxm&gt; G, F;
+Graph&lt;maxn, maxn&gt; T;
+
+int fa[maxn], dfn[maxn], idfn[maxn], cdfn = 0;
+int semi[maxn], idom[maxn];
+
+void dfs(int x) {
+	dfn[x] = ++cdfn; idfn[cdfn] = x;
+	for (int i = G.head[x]; i; i = G.nxt[i])
+		if (!dfn[G.to[i]]) {
+			fa[G.to[i]] = x;
+			dfs(G.to[i]);
+		}
+}
+
+inline int min_dfn(int x, int y) { return dfn[x] &lt; dfn[y] ? x : y; }
+
+namespace ADT {
+	int fa[maxn], val[maxn];
+	inline void init() {
+		for (int i = 1; i &lt;= n; ++i) fa[i] = i;
+		// val is 0, and dfn[0] is put bigger than n.
+	}
+	int find(int x) {
+		if (fa[x] == x) return x;
+		int y = fa[x];
+		fa[x] = find(fa[x]);
+		if (dfn[semi[val[x]]] &gt; dfn[semi[val[y]]]) val[x] = val[y];
+		return fa[x];
+	}
+	inline void merge(int x, int y) { // x &lt;-- y
+		x = find(x); y = find(y);
+		fa[y] = x;
+	}
+};
+
+int deg[maxn], siz[maxn];
+
+int main() {
+	scanf(&quot;%d %d&quot;, &amp;n, &amp;m);
+	int x = 0, y = 0;
+	for (int i = 1; i &lt;= m; ++i) {
+		scanf(&quot;%d %d&quot;, &amp;x, &amp;y);
+		G.insert(x, y);
+		F.insert(y, x);
+	}
+
+	dfs(1);
+	dfn[0] = n + 1; // prepare for comparation
+	ADT::init();
+
+	for (int i = n; i &gt;= 1; --i) {
+		x = idfn[i];
+		for (int j = F.head[x]; j; j = F.nxt[j]) { // get semi[x]
+			y = F.to[j];
+			if (dfn[y] &lt; dfn[x]) semi[x] = min_dfn(semi[x], y);
+			else {
+				ADT::find(y);
+				semi[x] = min_dfn(semi[x], semi[ADT::val[y]]);
+			}
+		}
+		for (int j = T.head[x]; j; j = T.nxt[j]) { // work for the &quot;y&quot;s which semi[y] = x
+			y = T.to[j];
+			ADT::find(y);
+			int z = ADT::val[y];
+			if (dfn[semi[z]] == dfn[x]) idom[y] = x; // equal to idom[y]=semi[y]
+			else idom[y] = z; // coorect later
+		}
+
+		ADT::val[x] = x;
+		ADT::merge(fa[x], x);
+		T.insert(semi[x], x); // a query.
+	}
+	for (int i = 2; i &lt;= n; ++i) {
+		x = idfn[i];
+		if (idom[x] != semi[x]) idom[x] = idom[idom[x]];
+	}
+
+	for (int i = n; i &gt;= 1; --i) {
+		x = idfn[i];
+		++siz[x];
+		if (idom[x]) siz[idom[x]] += siz[x];
+	}
+
+	for (int i = 1; i &lt;= n; ++i) printf(&quot;%d &quot;, siz[i]);
+	return 0;
+}</code></pre>
+  </div>
+  <div id="Comment" class="card"></div>
+  <script src="/static/js/loads.js"></script>
+</body>
+
+</html>

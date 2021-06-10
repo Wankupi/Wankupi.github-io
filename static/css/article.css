@@ -130,3 +130,9 @@ a:hover::after {
   background-color: #baeeff;
   color: inherit;
 }
+
+details {
+  background: #e0c8d1;
+  border-radius: 0.5em;
+  padding: 0.5em;
+}
