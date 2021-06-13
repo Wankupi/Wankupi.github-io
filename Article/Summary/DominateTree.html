@@ -103,7 +103,7 @@
       时的那个并查集来做。</p>
     <p>当求 <span>\(\semi\)</span> 的过程推进到点 <span>\(x\)</span> 的 <span>\(\semi_x\)</span> 时，在并查集上求 <span>\(x\)</span> 的值就是求
       <span>\(x\)</span> 到 <span>\(\semi_x\)</span> 这个链上最小值。故求 <span>\(\idom\)</span> 和求 <span>\(\semi\)</span> 同时进行，把求
-      <span>\(\idom_x\)</span> 这件事放到求 <span>\(\semi_x\)</span> 时。
+      <span>\(\idom_x\)</span> 这件事放到求 <span>\(\semi_{\semi_x}\)</span> 时。
     </p>
     <p>具体看代码吧</p>
     <pre class="cpp"><code>#include &lt;cstdio&gt;
@@ -185,7 +185,7 @@ int main() {
 			ADT::find(y);
 			int z = ADT::val[y];
 			if (dfn[semi[z]] == dfn[x]) idom[y] = x; // equal to idom[y]=semi[y]
-			else idom[y] = z; // coorect later
+			else idom[y] = z; // corect later
 		}
 
 		ADT::val[x] = x;
