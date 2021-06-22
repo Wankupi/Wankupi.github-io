@@ -22,14 +22,20 @@ function loadCss(url) {
 loadJs(isLocal ? "/static/js/MathJax/es5/tex-chtml.js" : "https://cdn.jsdelivr.net/npm/mathjax/es5/tex-chtml.js", { id: "MathJax-script", async: "" });
 
 if (!isLocal) {
-  loadJs("https://cdn.jsdelivr.net/npm/leancloud-storage@3/dist/av-min.js", { async: "" }, (e) => {
-    AV.init({ appId: "0fXMSbCD7SIxO3z7u5j1VjkL-gzGzoHsz", appKey: "eIi8ECHYotfQqPB4AQRI6nfi", serverURL: "https://0fxmsbcd.lc-cn-n1-shared.com" });
-    const r = new AV.Object("AccessRecords");
-    r.set("url", location.pathname);
-    r.set("hostname", location.hostname);
-    if (AV.User.current()) r.set("User", AV.User.current().attributes.username);
-    r.set("ua", navigator.appVersion);
-    r.save();
+  accessData = { url: location.pathname, hostname: location.hostname, ua: navigator.appVersion };
+  if (localStorage["AV/0fXMSbCD7SIxO3z7u5j1VjkL-gzGzoHsz/currentUser"]) {
+    let s = JSON.parse(localStorage["AV/0fXMSbCD7SIxO3z7u5j1VjkL-gzGzoHsz/currentUser"]);
+    if (s.username) accessData.User = s.username;
+  }
+  fetch("https://0fxmsbcd.lc-cn-n1-shared.com/1.1/classes/AccessRecords", {
+    headers: {
+      "content-type": "application/json",
+      "x-lc-id": "0fXMSbCD7SIxO3z7u5j1VjkL-gzGzoHsz",
+      "x-lc-Key": "eIi8ECHYotfQqPB4AQRI6nfi"
+    },
+    body: JSON.stringify(accessData),
+    method: "POST",
+    mode: "cors"
   });
 }
 
