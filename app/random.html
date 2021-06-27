@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="zh-Hans">
 
 <head>
 	<meta charset="utf-8">
@@ -92,7 +92,7 @@
 		<div id="res"></div>
 	</div>
 	<footer>
-		<div>随机编号</div>
+		<div>随机排列 (不会产生不动点)</div>
 		<div>由 <a href="/" target="_blank">王鲲鹏</a> 为 B15 编写</div>
 		<div>Copyleft 2020~2021 Wankupi</div>
 		<div>若数据相差较大，不便于一个一个点，可以打开控制台，输入 “n = 数字”，回车即可。</div>
@@ -110,18 +110,28 @@
 			}
 			return arr;
 		}
+		function check_repeat(arr) {
+			let l = arr.length;
+			for (let i = 0; i < l; ++i)
+				if (arr[i] == i + 1)
+					return true;
+			return false;
+		}
 		function $(s) {
 			return document.querySelectorAll(s);
 		}
 		var n = 16;
 		let status = false;
 		function func() {
+			if (typeof(n) != "number") n = 16;
 			if (n > 100) n = 100;
+			if (n < 5) n = 5;
 			let r = $("#res")[0];
 			let a = [];
 			for (let i = 0; i < n; ++i)
 				a.push(i + 1);
 			let b = shuffle(a);
+			while (check_repeat(b)) b = shuffle(b);
 			let mh = "<table>";
 			for (let i = 1; i <= n; ++i)
 				mh += `<tr><th>${i}</th><td>${b[i - 1]}</td></tr>`;
@@ -131,7 +141,7 @@
 		}
 		func();
 		function add() { ++n; if (!status) func(); }
-		function dec() { if (n > 1) --n; if (!status) func(); }
+		function dec() { if (n > 5) --n; if (!status) func(); }
 		function ABC() {
 			status = !status;
 			if (status) { func(); $("#switch")[0].innerText = "停止"; }
