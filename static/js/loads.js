@@ -1,7 +1,7 @@
-let isLocal = (location.hostname == "localhost" || location.hostname == "127.0.0.1");
+let isLocal = (location.hostname == "localhost" || location.hostname == "127.0.0.1" || location.hostname == "0.0.0.0");
 let isMainPage = (location.pathname == "/");
-
-var MathJax = { startup: { typeset: (!isMainPage), output: 'chtml' }, tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, options: { enableMenu: false } };
+let mathEles = { main: [".art-outline"], art: [".art-container"] };
+var MathJax = { startup: { elements: isMainPage ? mathEles.main : mathEles.art, typeset: !isMainPage, output: 'chtml' }, tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, options: { enableMenu: false } };
 
 function loadJs(src, config, func) {
   let d = document.createElement("script");
