@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width initial-scale=1">
+  <title>[PKUWC2018]随机游走 解题报告</title>
+  <meta name="keywords" content="游走,期望,dp,反演,min-max容斥,FMT,FWT,高斯消元">
+  <meta name="description" content="这里是王鲲鹏的博客，有自己写的一些文章，日志等。让我们奋勇拼搏，不负青春韶华!">
+  <meta name="author" content="Wankupi">
+  <link rel="icon" type="image/png" sizes="640x640" href="/static/images/icon.png">
+  <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+</head>
+
+<body>
+<div class="card art-container">
+<h3 id="pkuwc2018随机游走-解题报告">[PKUWC2018]随机游走 解题报告</h3>
+<h4 id="题意">题意</h4>
+<p>给定一棵 <span class="math inline">\(n\)</span> 个点的无向树，一开始在 <span class="math inline">\(X\)</span> 点，每一步完全随机地走向相邻的一个点。<span class="math inline">\(Q\)</span> 次询问集合 <span class="math inline">\(S\)</span> 中的所有点都至少走到一次的期望步数。对 <span class="math inline">\(998244353\)</span> 取模。 <span class="math inline">\(n \le 18, Q \le 5000\)</span>。</p>
+<h4 id="题解">题解</h4>
+<p>即问集合中最后到的那个点的期望步数，即取最大值的期望.</p>
+<p>用 min-max 容斥反演，变成求最早到这个集合是什么时候，这个就好处理的，需要考虑的少了.</p>
+<p>设 <span class="math inline">\(f_{S,x}\)</span> 表示 <span class="math inline">\(x\)</span> 到集合 <span class="math inline">\(S\)</span> 的期望步数. 答案即 <span class="math display">\[
+Ans_S=\sum_{T\subseteq S}(-1)^{\vert T \vert +1} f_{S,X}
+\]</span></p>
+<p>在不引起歧义情况下，后文略去 <span class="math inline">\(S\)</span>，记做 <span class="math inline">\(f_x\)</span>. 显然，如果 <span class="math inline">\(x \in S\)</span>，<span class="math inline">\(f_x=0\)</span>.</p>
+<p>树不妨以 <span class="math inline">\(X\)</span> 为根，记 <span class="math inline">\(d_x\)</span> 表示点 <span class="math inline">\(x\)</span> 的度数。对于 <span class="math inline">\(x\not\in S\)</span>，有 <span class="math display">\[
+\begin{aligned}
+f_x&amp;=\frac{1}{d_x}\left[f_{fa_x}+1+\sum_{y\in Son_x}(f_y+1)\right]\\
+&amp;=\frac{1}{d_x}(f_{fa_x}+\sum_{y\in Son_x}f_y)+1
+\end{aligned}
+\]</span> 一般图要是类似这样，只能高斯消元了… 学到一个技巧，因为这是一棵树，具有某种“有向性”和“唯一性”（口胡），所以可以把父节点的贡献提出来，尝试表示为 <span class="math inline">\(f_x=A_x\cdot f_{fa_x}+B_x\)</span> 的形式.</p>
+<p>可以发现这个对于特殊点是有良定义的. 对 <span class="math inline">\(x\in S\)</span>，<span class="math inline">\(A_x=B_x=0\)</span>. 对叶节点且<span class="math inline">\(x\not\in S\)</span>，<span class="math inline">\(A_x=B_x=1\)</span>.</p>
+<p>然后对于朴素的一个点，尝试找找它的 <span class="math inline">\(A,B\)</span> 和子节点的关系： <span class="math display">\[
+d_x\cdot f_x= f_{fa_x}+\sum_{y}(A_yf_x+B_y)+d_x\\
+f_x=\frac{1}{d-\sum_y A_y} \cdot f_{fa_x}+\frac{d+\sum_y B_y}{d-\sum_y A_y}
+\]</span> 故 <span class="math inline">\(A_x=\frac{1}{d-\sum_y A_y}\)</span>，<span class="math inline">\(B_x=\frac{d+\sum_y B_y}{d-\sum_y A_y}\)</span>.</p>
+<p>按着这个就可以一路推到根了。对于根节点，递推形式差不多。而又有 <span class="math inline">\(f_X=B_X\)</span>.</p>
+<p>然后反演就可以，反演最好用 FWT（FMT）.</p>
+<p>我最开始做的时候犯了个错/xk：我先把点编号变成0开始，然后dfs的时候给根节点传的father弄成了0…</p>
+<p>code:</p>
+<pre class="cpp"><code>#include &lt;cstdio&gt;
+
+typedef long long ll;
+int const mod = 998244353;
+inline int pls(int a, int b) { return a + b &lt; mod ? a + b : a + b - mod; }
+inline int dec(int a, int b) { return a &lt; b ? a - b + mod : a - b; }
+inline int pow(int x, int b) {
+	int r = 1;
+	while (b) {
+		if (b &amp; 1) r = ll(r) * x % mod;
+		x = ll(x) * x % mod;
+		b &gt;&gt;= 1;
+	}
+	return r;
+}
+inline int inv(int x) { return pow(x, mod - 2); }
+
+int n = 0, Q = 0, X = 0;
+int S = 0;
+
+int d[18];
+int head[18], nxt[39], to[39], cnt = 0;
+inline void insert(int u, int e) {
+	nxt[++cnt] = head[u];
+	head[u] = cnt;
+	to[cnt] = e;
+}
+
+struct Res {
+	int a, b;
+};
+Res operator+(Res const &amp;A, Res const &amp;B) { return Res{pls(A.a, B.a), pls(A.b, B.b)}; }
+
+Res dfs(int x, int fa) {
+	if ((S &gt;&gt; x) &amp; 1) return Res{0, 0};
+	if (!head[x]) return Res{1, 1};
+	Res r{0, 0};
+	for (int i = head[x]; i; i = nxt[i]) {
+		if (to[i] == fa) continue;
+		r = r + dfs(to[i], x);
+	}
+	r = Res{inv(dec(d[x], r.a)), pls(d[x], r.b)};
+	r.b = ll(r.b) * r.a % mod;
+	return r;
+}
+
+int f[1 &lt;&lt; 18];
+
+int main() {
+	freopen(&quot;t.out&quot;, &quot;w&quot;, stdout);
+	scanf(&quot;%d %d %d&quot;, &amp;n, &amp;Q, &amp;X);
+	--X;
+	int x = 0, y = 0;
+	for (int i = 1; i &lt; n; ++i) {
+		scanf(&quot;%d %d&quot;, &amp;x, &amp;y);
+		--x; --y;
+		++d[x]; ++d[y];
+		insert(x, y);
+		insert(y, x);
+	}
+	for (S = 1; S &lt; (1 &lt;&lt; n); ++S) {
+		f[S] = dfs(X, X).b;
+		int c = 0;
+		for (int i = 0; i &lt; n; ++i) if ((S &gt;&gt; i) &amp; 1) c ^= 1;
+		if ((c &amp; 1) == 0 &amp;&amp; f[S] &gt; 0) f[S] = mod - f[S];
+	}
+	for (int len = 1; len &lt; (1 &lt;&lt; n); len &lt;&lt;= 1)
+		for (int l = 0; l &lt; (1 &lt;&lt; n); l += len &lt;&lt; 1)
+			for (int i = 0; i &lt; len; ++i)
+				f[l + len + i] = pls(f[l + len + i], f[l + i]);
+	for (int i = 1; i &lt;= Q; ++i) {
+		scanf(&quot;%d&quot;, &amp;y);
+		S = 0;
+		for (int j = 1; j &lt;= y; ++j) {
+			scanf(&quot;%d&quot;, &amp;x);
+			S |= (1 &lt;&lt; (x - 1));
+		}
+		printf(&quot;%d\n&quot;, f[S]);
+	}
+	return 0;
+}</code></pre>
+</div>
+  <div id="Comment" class="card"></div>
+  <script src="/static/js/loads.js"></script>
+</body>
+
+</html>

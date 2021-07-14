@@ -223,5 +223,11 @@
     "path": "Summary/DominateTree",
     "outline": "学习了求支配树的Lengauer Tarjan算法。给定一张有向图，设定源点为 $s$，则从 $s$ 出发到 $x$ 必须经过的点称为支配点。若 $a$ 支配 $b$，则 $a$ 是 $b$ 的支配点，在图中删去 $a$ 点后不能从 $s$ 到达 $b$。",
     "date": "2021-06-10T01:40:34.743Z"
+  },
+  {
+    "title": "[PKUWC2018]随机游走",
+    "path": "Solution/LuoguP5643",
+    "outline": "期望好题！",
+    "date": "2021-07-14T16:19:56.172Z"
   }
 ]
